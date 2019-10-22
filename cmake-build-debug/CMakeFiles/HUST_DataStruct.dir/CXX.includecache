@@ -6,9 +6,25 @@
 
 #IncludeRegexTransform: 
 
-/home/john/Documents/HomeWork/HUST-DataStruct/main.cpp
-iostream
+/home/john/Documents/HomeWork/ds-lab/SeqList.cpp
+SeqList.h
+/home/john/Documents/HomeWork/ds-lab/SeqList.h
+
+/home/john/Documents/HomeWork/ds-lab/SeqList.h
+bits/c++config.h
+-
+functional
+-
+initializer_list
 -
 memory
 -
+string
+-
+
+/home/john/Documents/HomeWork/ds-lab/main.cpp
+iostream
+-
+SeqList.cpp
+/home/john/Documents/HomeWork/ds-lab/SeqList.cpp
 

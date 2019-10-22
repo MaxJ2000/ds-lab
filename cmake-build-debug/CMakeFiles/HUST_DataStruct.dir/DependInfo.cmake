@@ -4,8 +4,8 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/john/Documents/HomeWork/HUST-DataStruct/SeqList.cpp" "/home/john/Documents/HomeWork/HUST-DataStruct/cmake-build-debug/CMakeFiles/HUST_DataStruct.dir/SeqList.cpp.o"
-  "/home/john/Documents/HomeWork/HUST-DataStruct/main.cpp" "/home/john/Documents/HomeWork/HUST-DataStruct/cmake-build-debug/CMakeFiles/HUST_DataStruct.dir/main.cpp.o"
+  "/home/john/Documents/HomeWork/ds-lab/SeqList.cpp" "/home/john/Documents/HomeWork/ds-lab/cmake-build-debug/CMakeFiles/HUST_DataStruct.dir/SeqList.cpp.o"
+  "/home/john/Documents/HomeWork/ds-lab/main.cpp" "/home/john/Documents/HomeWork/ds-lab/cmake-build-debug/CMakeFiles/HUST_DataStruct.dir/main.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

@@ -5,10 +5,7 @@ List<T>::List() : _length(0), _size(0), _elem(std::make_unique<T[]>(0)) {}
 
 template<typename T>
 List<T>::List(std::size_t size)
-        : _length(0), _size(size), _elem(std::make_unique<T[]>(size)) {
-    // see:
-    // https://stackoverflow.com/questions/21377360/proper-way-to-create-unique-ptr-that-holds-an-allocated-array
-}
+        : _length(0), _size(size), _elem(std::make_unique<T[]>(size)) {}
 
 template<typename T>
 auto List<T>::operator[](std::size_t index) -> T & {
@@ -44,7 +41,7 @@ auto List<T>::locate(const T e, std::function<bool(const T &, const T &)> &&eq) 
 
 template<typename T>
 auto List<T>::prior(const T &e) -> T & {
-    auto pos = locate(e, [](const std::string &a, const std::string &b) { return a == b; });
+    auto pos = locate(e, [](const T &a, const T &b) { return a == b; });
     if (pos <= 0) {
         throw std::overflow_error("get index: " + std::to_string(pos));
     }
@@ -53,7 +50,7 @@ auto List<T>::prior(const T &e) -> T & {
 
 template<typename T>
 auto List<T>::next(const T &e) -> T & {
-    auto pos = locate(e, [](const std::string &a, const std::string &b) { return a == b; });
+    auto pos = locate(e, [](const T &a, const T &b) { return a == b; });
     if (pos == _length) {
         throw std::overflow_error("get index: " + std::to_string(pos));
     }
@@ -62,34 +59,16 @@ auto List<T>::next(const T &e) -> T & {
 
 
 template<typename T>
-auto List<T>::traverse(std::function<void(T &)> &&f) {
+auto List<T>::traverse(std::function<void(T &)> &&f) -> void {
     for (auto &&i : *this) {
         f(i);
     }
 }
 
-
 template<typename T>
-auto List<T>::resize(std::size_t size){
-    if (size < _size) {
-        throw std::overflow_error("get index: " + std::to_string(size));
-    }
-
-    auto p = std::make_unique<T[]>(size);
-    auto oldElem = _elem.get();
-    auto elem = p.get();
-    for (std::size_t i = 0; i < _length; i++) {
-        elem[i] = oldElem[i];
-    }
-    _elem.swap(p);
-    _size = size;
-}
-
-template<typename T>
-auto List<T>::insert(std::size_t pos, const T &e) {
+auto List<T>::insert(std::size_t pos, const T &e) -> void {
     if (pos > _size + 1 || pos < 1) {
-        // TODO(error): throw error
-        return;
+        throw std::overflow_error("get pos: " + std::to_string(pos));
     }
 
     if (_length == _size) {
@@ -106,7 +85,7 @@ auto List<T>::insert(std::size_t pos, const T &e) {
 template<typename T>
 auto List<T>::remove(std::size_t index) -> T {
     if (index < 1 || _length < index) {
-        // TODO(error): throw error
+        throw std::overflow_error("get index: " + std::to_string(index));
     }
     auto out = _elem[index - 1];
 
@@ -119,9 +98,9 @@ auto List<T>::remove(std::size_t index) -> T {
 }
 
 template<typename T>
-auto List<T>::remove(std::size_t index, T &out) {
+auto List<T>::remove(std::size_t index, T &out) -> void {
     if (index < 1 || _length < index) {
-        // TODO(error): throw error
+        throw std::overflow_error("get index: " + std::to_string(index));
     }
     out = _elem[index - 1];
 
@@ -130,4 +109,21 @@ auto List<T>::remove(std::size_t index, T &out) {
         data[i] = data[i + 1];
     }
     _length--;
+}
+
+
+template<typename T>
+auto List<T>::resize(std::size_t size) -> void {
+    if (size < _size) {
+        throw std::length_error("resize with size" + std::to_string(size));
+    }
+
+    auto p = std::make_unique<T[]>(size);
+    auto oldElem = _elem.get();
+    auto elem = p.get();
+    for (std::size_t i = 0; i < _length; i++) {
+        elem[i] = oldElem[i];
+    }
+    _elem.swap(p);
+    _size = size;
 }

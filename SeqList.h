@@ -21,15 +21,19 @@ public:
 
     explicit List(std::size_t);
 
-    [[nodiscard]] inline auto begin() const -> T * { return _length > 0 ? &_elem[0] : nullptr; }
+    [[nodiscard]] auto begin() const -> T * { return _length > 0 ? &_elem[0] : nullptr; }
 
-    [[nodiscard]] inline auto end() const -> T * { return _length > 0 ? &_elem[_length] : nullptr; }
+    [[nodiscard]] auto end() const -> T * { return _length > 0 ? &_elem[_length] : nullptr; }
 
-    [[nodiscard]] inline auto size() const { return _size; }
+    [[nodiscard]] auto size() const { return _size; }
 
-    [[nodiscard]] inline auto length() const { return _length; }
+    [[nodiscard]] auto length() const { return _length; }
+
+    [[nodiscard]] auto clear() { _elem.reset(nullptr);_length=0; }
+
 
     auto empty() -> bool;
+
 
     auto operator[](std::size_t) -> T &;
 
@@ -43,14 +47,13 @@ public:
 
     auto traverse(std::function<void(T &)> &&) -> void;
 
-    auto resize(std::size_t) -> void;
-
     auto insert(std::size_t, const T &) -> void;
 
     auto remove(std::size_t, T &) -> void;
 
     auto remove(std::size_t) -> T;
 
+    auto resize(std::size_t) -> void;
 };
 
 #endif // SEQLIST_H
