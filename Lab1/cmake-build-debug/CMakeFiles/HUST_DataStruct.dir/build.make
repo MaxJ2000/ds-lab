@@ -43,10 +43,10 @@ RM = /home/john/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/192.6262.62/bin/c
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/john/Documents/HomeWork/HUST-DataStruct
+CMAKE_SOURCE_DIR = /home/john/Documents/HomeWork/HUST-DataStruct/Lab1
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/john/Documents/HomeWork/HUST-DataStruct/cmake-build-debug
+CMAKE_BINARY_DIR = /home/john/Documents/HomeWork/HUST-DataStruct/Lab1/cmake-build-debug
 
 # Include any dependencies generated for this target.
 include CMakeFiles/HUST_DataStruct.dir/depend.make
@@ -59,29 +59,29 @@ include CMakeFiles/HUST_DataStruct.dir/flags.make
 
 CMakeFiles/HUST_DataStruct.dir/main.cpp.o: CMakeFiles/HUST_DataStruct.dir/flags.make
 CMakeFiles/HUST_DataStruct.dir/main.cpp.o: ../main.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/john/Documents/HomeWork/HUST-DataStruct/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/HUST_DataStruct.dir/main.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/HUST_DataStruct.dir/main.cpp.o -c /home/john/Documents/HomeWork/HUST-DataStruct/main.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/john/Documents/HomeWork/HUST-DataStruct/Lab1/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/HUST_DataStruct.dir/main.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/HUST_DataStruct.dir/main.cpp.o -c /home/john/Documents/HomeWork/HUST-DataStruct/Lab1/main.cpp
 
 CMakeFiles/HUST_DataStruct.dir/main.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/HUST_DataStruct.dir/main.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/john/Documents/HomeWork/HUST-DataStruct/main.cpp > CMakeFiles/HUST_DataStruct.dir/main.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/john/Documents/HomeWork/HUST-DataStruct/Lab1/main.cpp > CMakeFiles/HUST_DataStruct.dir/main.cpp.i
 
 CMakeFiles/HUST_DataStruct.dir/main.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/HUST_DataStruct.dir/main.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/john/Documents/HomeWork/HUST-DataStruct/main.cpp -o CMakeFiles/HUST_DataStruct.dir/main.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/john/Documents/HomeWork/HUST-DataStruct/Lab1/main.cpp -o CMakeFiles/HUST_DataStruct.dir/main.cpp.s
 
 CMakeFiles/HUST_DataStruct.dir/SeqList.cpp.o: CMakeFiles/HUST_DataStruct.dir/flags.make
 CMakeFiles/HUST_DataStruct.dir/SeqList.cpp.o: ../SeqList.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/john/Documents/HomeWork/HUST-DataStruct/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/HUST_DataStruct.dir/SeqList.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/HUST_DataStruct.dir/SeqList.cpp.o -c /home/john/Documents/HomeWork/HUST-DataStruct/SeqList.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/john/Documents/HomeWork/HUST-DataStruct/Lab1/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/HUST_DataStruct.dir/SeqList.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/HUST_DataStruct.dir/SeqList.cpp.o -c /home/john/Documents/HomeWork/HUST-DataStruct/Lab1/SeqList.cpp
 
 CMakeFiles/HUST_DataStruct.dir/SeqList.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/HUST_DataStruct.dir/SeqList.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/john/Documents/HomeWork/HUST-DataStruct/SeqList.cpp > CMakeFiles/HUST_DataStruct.dir/SeqList.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/john/Documents/HomeWork/HUST-DataStruct/Lab1/SeqList.cpp > CMakeFiles/HUST_DataStruct.dir/SeqList.cpp.i
 
 CMakeFiles/HUST_DataStruct.dir/SeqList.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/HUST_DataStruct.dir/SeqList.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/john/Documents/HomeWork/HUST-DataStruct/SeqList.cpp -o CMakeFiles/HUST_DataStruct.dir/SeqList.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/john/Documents/HomeWork/HUST-DataStruct/Lab1/SeqList.cpp -o CMakeFiles/HUST_DataStruct.dir/SeqList.cpp.s
 
 # Object files for target HUST_DataStruct
 HUST_DataStruct_OBJECTS = \
@@ -95,7 +95,7 @@ HUST_DataStruct: CMakeFiles/HUST_DataStruct.dir/main.cpp.o
 HUST_DataStruct: CMakeFiles/HUST_DataStruct.dir/SeqList.cpp.o
 HUST_DataStruct: CMakeFiles/HUST_DataStruct.dir/build.make
 HUST_DataStruct: CMakeFiles/HUST_DataStruct.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/john/Documents/HomeWork/HUST-DataStruct/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking CXX executable HUST_DataStruct"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/john/Documents/HomeWork/HUST-DataStruct/Lab1/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking CXX executable HUST_DataStruct"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/HUST_DataStruct.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -108,6 +108,6 @@ CMakeFiles/HUST_DataStruct.dir/clean:
 .PHONY : CMakeFiles/HUST_DataStruct.dir/clean
 
 CMakeFiles/HUST_DataStruct.dir/depend:
-	cd /home/john/Documents/HomeWork/HUST-DataStruct/cmake-build-debug && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/john/Documents/HomeWork/HUST-DataStruct /home/john/Documents/HomeWork/HUST-DataStruct /home/john/Documents/HomeWork/HUST-DataStruct/cmake-build-debug /home/john/Documents/HomeWork/HUST-DataStruct/cmake-build-debug /home/john/Documents/HomeWork/HUST-DataStruct/cmake-build-debug/CMakeFiles/HUST_DataStruct.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/john/Documents/HomeWork/HUST-DataStruct/Lab1/cmake-build-debug && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/john/Documents/HomeWork/HUST-DataStruct/Lab1 /home/john/Documents/HomeWork/HUST-DataStruct/Lab1 /home/john/Documents/HomeWork/HUST-DataStruct/Lab1/cmake-build-debug /home/john/Documents/HomeWork/HUST-DataStruct/Lab1/cmake-build-debug /home/john/Documents/HomeWork/HUST-DataStruct/Lab1/cmake-build-debug/CMakeFiles/HUST_DataStruct.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/HUST_DataStruct.dir/depend
 
