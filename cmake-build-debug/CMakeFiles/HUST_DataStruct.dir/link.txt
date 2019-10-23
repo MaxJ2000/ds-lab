@@ -1,1 +1,0 @@
-/usr/bin/c++  -g   CMakeFiles/HUST_DataStruct.dir/main.cpp.o CMakeFiles/HUST_DataStruct.dir/SeqList.cpp.o  -o HUST_DataStruct 
