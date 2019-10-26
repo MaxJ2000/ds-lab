@@ -2,12 +2,10 @@
 #ifndef SEQLIST_H
 #define SEQLIST_H
 
-#include <bits/c++config.h>
 #include <functional>
 #include <initializer_list>
 #include <memory>
 #include <string>
-
 
 template<typename T>
 class List {
@@ -29,7 +27,10 @@ public:
 
     [[nodiscard]] auto length() const { return _length; }
 
-    [[nodiscard]] auto clear() { _elem.reset(new T[0]);_length=0; }
+    [[nodiscard]] auto clear() {
+        _elem.reset(new T[0]);
+        _length = 0;
+    }
 
 
     auto empty() -> bool;
@@ -52,6 +53,10 @@ public:
     auto remove(std::size_t) -> T;
 
     auto resize(std::size_t) -> void;
+
+    auto save(std::string &&) -> void;
+
+    auto load(std::string &&) -> void;
 };
 
 #endif // SEQLIST_H

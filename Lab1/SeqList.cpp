@@ -1,3 +1,4 @@
+#include <fstream>
 #include "SeqList.h"
 
 template<typename T>
@@ -115,4 +116,26 @@ auto List<T>::resize(std::size_t size) -> void {
     }
     _elem.swap(p);
     _size = size;
+}
+
+template<typename T>
+auto List<T>::save(std::string &&f)->void {
+    std::ofstream fs;
+    fs.open(f);
+    for (auto &&i:*this) {
+        fs << i << std::endl;
+    }
+    fs.close();
+}
+
+template <typename T>
+auto List<T>::load(std::string &&f) -> void {
+    std::ifstream fs;
+    fs.open(f);
+    T buf;
+    while (fs >> buf) {
+        insert(buf);
+    }
+
+    fs.close();
 }
