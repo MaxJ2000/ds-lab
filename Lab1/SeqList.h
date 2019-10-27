@@ -32,9 +32,7 @@ public:
         _length = 0;
     }
 
-
     auto empty() -> bool;
-
 
     auto operator[](std::size_t) -> T &;
 
@@ -48,6 +46,8 @@ public:
 
     auto traverse(std::function<void(T &)> &&) -> void;
 
+    auto insert(const T &) -> void;
+
     auto insert(std::size_t, const T &) -> void;
 
     auto remove(std::size_t) -> T;
@@ -57,6 +57,13 @@ public:
     auto save(std::string &&) -> void;
 
     auto load(std::string &&) -> void;
+
+    template<typename S>
+    friend std::ostream &operator<<(std::ostream &, const List<S> &);
+
+    template<typename S>
+    friend std::istream &operator>>(std::istream &, List<S> &);
+
 };
 
 #endif // SEQLIST_H

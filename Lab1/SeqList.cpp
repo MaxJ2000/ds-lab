@@ -16,6 +16,7 @@ auto List<T>::operator[](std::size_t index) -> T & {
     return _elem[index];
 }
 
+
 template<typename T>
 auto List<T>::empty() -> bool {
     return _length == 0;
@@ -88,6 +89,11 @@ auto List<T>::insert(std::size_t pos, const T &e) -> void {
 }
 
 template<typename T>
+auto List<T>::insert(const T &e) -> void {
+    insert(length(), e);
+}
+
+template<typename T>
 auto List<T>::remove(std::size_t index) -> T {
     if (index < 0 || _length <= index) {
         throw std::overflow_error("get index: " + std::to_string(index));
@@ -119,23 +125,41 @@ auto List<T>::resize(std::size_t size) -> void {
 }
 
 template<typename T>
-auto List<T>::save(std::string &&f)->void {
+auto List<T>::save(std::string &&f) -> void {
     std::ofstream fs;
     fs.open(f);
+    fs << _size << std::endl;
     for (auto &&i:*this) {
         fs << i << std::endl;
     }
     fs.close();
 }
 
-template <typename T>
+template<typename T>
 auto List<T>::load(std::string &&f) -> void {
     std::ifstream fs;
     fs.open(f);
     T buf;
+    fs >> _size;
     while (fs >> buf) {
         insert(buf);
     }
-
     fs.close();
+}
+
+template<typename T>
+std::ostream &operator<<(std::ostream &os, const List<T> &list) {
+    os << "List Length:" << list.length() << std::endl;
+    for (auto &&i:list) {
+        os << i << std::endl;
+    }
+    return os;
+}
+
+template<typename T>
+std::istream &operator>>(std::istream &in, List<T> &list) {
+    T buf;
+    in >> buf;
+    list.insert(buf);
+    return in;
 }
