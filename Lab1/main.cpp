@@ -1,295 +1,146 @@
 #include <iostream>
 #include "SeqList.cpp"
+typedef std::string ElemType;
 
-template<typename T>
-auto InitList(List<T> &list) -> void;
-
-template<typename T>
-auto DestroyList(List<T> &list) -> void;
-
-template<typename T>
-auto ClearList(List<T> &list) -> void;
-
-template<typename T>
-auto ListEmpty(List<T> &list) -> bool;
-
-template<typename T>
-auto ListLength(List<T> &list) -> std::size_t;
-
-template<typename T>
-auto GetElem(List<T> &list, std::size_t index, T &e) -> void;
-
-template<typename T>
-auto LocateElem(List<T> &list, const T &e, std::function<bool(const T &, const T &)> &&eq) -> int;
-
-template<typename T>
-auto PriorElem(List<T> &list, const T &cur_e, T &pre_e) -> void;
-
-template<typename T>
-auto NextElem(List<T> &list, const T &cur_e, T &next_e) -> void;
-
-template<typename T>
-auto ListInsert(List<T> &list, std::size_t index, T &e) -> void;
-
-template<typename T>
-auto ListDelete(List<T> &list, std::size_t index, T &e) -> void;
-
-template<typename T>
-auto ListTraverse(List<T> &list, std::function<void(T &)> &&f) -> void;
-
-auto printMenu() {
-    printf("+--------------------------------------------------------------------+\n");
-    printf("|             Welcome to panyue's linear list demo system!           |\n");
-    printf("|               Here are some functions you can call:                |\n");
-    printf("|                                                                    |\n");
-    printf("|               1: init_list           2: destroy_list               |\n");
-    printf("|               3: clear_list          4: is_list_empty              |\n");
-    printf("|               5: list_length         6: get_list_item              |\n");
-    printf("|               7: locate_list_item    8: piror_list_item            |\n");
-    printf("|               9: next_list_item     10: list_insert                |\n");
-    printf("|              11: list_delete        12: print_list                 |\n");
-    printf("|              13: list_save           0: quit                       |\n");
-    printf("|                                                                    |\n");
-    printf("|Enter the number of the function and see the usage and call it!     |\n");
-    printf("|Enter 0 to quit the demo system.                                    |\n");
-    printf("|                                                                    |\n");
-    printf("+--------------------------------------------------------------------+\n");
-    printf("\n");
-    printf("Your choose: ");
+auto displayMenu(int index) -> void {
+    printf("----------------------------------------\n");
+    printf("** Current Index is %d **\n", index);
+    printf("%-20s%-20s\n", "1. InitList", "10. ListInsert");
+    printf("%-20s%-20s\n", "2. DestroyList", "11. ListDelete");
+    printf("%-20s%-20s\n", "3. ClearList", "12. ListTraverse");
+    printf("%-20s%-20s\n", "4. ListEmpty", "13. Push");
+    printf("%-20s%-20s\n", "5. ListLength", "14. Pop");
+    printf("%-20s%-20s\n", "6. GetElem", "15. Save");
+    printf("%-20s%-20s\n", "7. LocateElem", "16. Load");
+    printf("%-20s%-20s\n", "8. PriorElem", "20. ChangeIndex");
+    printf("%-20s%-20s\n", "9. NextElem", "");
 }
 
 int main() {
-//    int choose = 0xff;
-//    List L =List<int>();
-//    while (choose != 0) {
-//        printMenu();
-//        scanf("%d", &choose);
-//        int id, order, elem, index;
-//        switch (choose) {
-//            case 1:
-//                printf("/*\n");
-//                printf(" * Function Name: init_list\n");
-//                printf(" * Module: Data structures\n");
-//                printf(" * Parameter: List L\n");
-//                printf(" * Return: void\n");
-//                printf(" * Use: initial the linear list\n");
-//                printf(" */\n");
-//                printf("\n");
-//                InitList<int>(L);
-//                printf("\n");
-//                break;
-//            case 2:
-//                printf("/*\n");
-//                printf(" * Function Name: destroyList\n");
-//                printf(" * Module: Data structures\n");
-//                printf(" * Parameter: List L\n");
-//                printf(" * Return: void\n");
-//                printf(" * Use: destroy the link list\n");
-//                printf(" */\n");
-//                printf("\n");
-//                DestroyList(L);
-//                break;
-//            case 3:
-//                printf("/*\n");
-//                printf(" * Function Name: ClearList\n");
-//                printf(" * Module: Data structures\n");
-//                printf(" * Parameter: List L\n");
-//                printf(" * Return: void\n");
-//                printf(" * Use: let the link list empty\n");
-//                printf(" */\n");
-//                printf("\n");
-//                ClearList(L);
-//                break;
-//            case 4:
-//                printf("/*\n");
-//                printf(" * Function Name: ListEmpty\n");
-//                printf(" * Module: Data structures\n");
-//                printf(" * Parameter: List L\n");
-//                printf(" * Return: bool(true or false)\n");
-//                printf(" * Use: judge if the link list is empty\n");
-//                printf(" */\n");
-//                printf("\n");
-//                if (ListEmpty(L)) {
-//                    printf("Linear list is empty!\n");
-//                } else {
-//                    printf("Linear list is not empty!\n");
-//                }
-//                break;
-//            case 5:
-//                printf("/*\n");
-//                printf(" * Function Name: list_length\n");
-//                printf(" * Module: Data structures\n");
-//                printf(" * Parameter: linear_list L\n");
-//                printf(" * Return: int(the length)\n");
-//                printf(" * Use: get the length of linear list\n");
-//                printf(" */\n");
-//                printf("\n");
-//                printf("The length of linear list is %d.\n", ListLength(L));
-//                break;
-//            case 6:
-//                printf("/*\n");
-//                printf(" * Function Name: get_list_item\n");
-//                printf(" * Module: Data structures\n");
-//                printf(" * Parameter: List L, int order, int *elem\n");
-//                printf(" * Return: void\n");
-//                printf(" * Use: get the ordered element of link list\n");
-//                printf(" */\n");
-//                printf("\n");
-//                printf("Then, enter the list id and index: ");
-//                scanf("%d", &order);
-//                GetElem(L, order, elem);
-//                printf("The element is %d.\n", elem);
-//                break;
-//            case 7:
-//                printf("/*\n");
-//                printf(" * Function Name: locate_list_item\n");
-//                printf(" * Module: Data structures\n");
-//                printf(" * Parameter: linear_list L, int ordered_elem\n");
-//                printf(" * Return: int(index)\n");
-//                printf(" * Use: get the index of ordered item\n");
-//                printf(" */\n");
-//                printf("\n");
-//                scanf("%d", &index);
-//                order=LocateElem<int>(L, index, [](const int &a, const int &b) { return a == b; });
-//                printf("The index  is %d.\n", order);
-//                break;
-//            case 8:
-//                printf("/*\n");
-//                printf(" * Function Name: piror_list_item\n");
-//                printf(" * Module: Data structures\n");
-//                printf(" * Parameter: linear_list L, int elem, int *elem_pre\n");
-//                printf(" * Return: int(status)\n");
-//                printf(" * Use: get the ordered element's piror\n");
-//                printf(" */\n");
-//                printf("\n");
-//                scanf("%d", &elem);
-//                int elem_pre;
-//                PriorElem(L, elem, elem_pre);
-//                printf("The piror element of %d is %d.\n", elem, elem_pre);
-//                break;
-//            case 9:
-//                printf("/*\n");
-//                printf(" * Function Name: next_list_item\n");
-//                printf(" * Module: Data structures\n");
-//                printf(" * Parameter: linear_list L, int elem, int *elem_next\n");
-//                printf(" * Return: int(status)\n");
-//                printf(" * Use: get the ordered element's next\n");
-//                printf(" */\n");
-//                printf("\n");
-//                scanf("%d", &elem);
-//                int elem_after;
-//                NextElem(L, elem, elem_after);
-//                printf("The piror element of %d is %d.\n", elem, elem_after);
-//                break;
-//            case 10:
-//                printf("/*\n");
-//                printf(" * Function Name: list_insert\n");
-//                printf(" * Module: Data structures\n");
-//                printf(" * Parameter: linear_list *L, int order, int elem\n");
-//                printf(" * Return: int(status)\n");
-//                printf(" * Use: insert a element in the link list\n");
-//                printf(" */\n");
-//                printf("\n");
-//                printf("Then, enter the list index and element: ");
-//                scanf("%d %d", &order, &elem);
-//                ListInsert(L, order, elem);
-//                break;
-//            case 11:
-//                printf("/*\n");
-//                printf(" * Function Name: list_delete\n");
-//                printf(" * Module: Data structures\n");
-//                printf(" * Parameter: linear_list *L, int order, int *elem\n");
-//                printf(" * Return: int(status)\n");
-//                printf(" * Use: delete a element in the link list\n");
-//                printf(" */\n");
-//                printf("\n");
-//                printf("Then, enter the list index: ");
-//                scanf("%d", &order);
-//                ListDelete(L, order, elem);
-//                printf("Delete %d succeed!\n", elem);
-//                break;
-//            case 12:
-//                printf("/*\n");
-//                printf(" * Function Name: print_list\n");
-//                printf(" * Module: Data structures\n");
-//                printf(" * Parameter: linear_list L, char *payload\n");
-//                printf(" * Return: None\n");
-//                printf(" * Use: print the elements of the linklist to the payload\n");
-//                printf(" */\n");
-//                printf("\n");
-//                ListTraverse<int>(L, [](const int &a) {
-//                    printf("%d", a);
-//                });
-//                printf("\n");
-//                break;
-//        }
-//    }
-    List<std::string> list(10);
-//    std::cin >> list;
-//    std::cin >> list;
-//    std::cin >> list;
-    list.load("test");
-    std::cout << list;
-    list.save("test");
+    int option = 1;
+    int index = 0;
+    List<ElemType> lists[20];
+    while (option) {
+        try {
+            displayMenu(index);
+            std::cin >> option;
+            switch (option) {
+                case 0: {
+                    break;
+                }
+                case 1: {
+                    lists[index] = List<ElemType>(0);
+                    std::cout << "InitList" << std::endl;
+                    break;
+                }
+                case 2: {
+                    std::cout << "DestroyList" << std::endl;
+                    lists[index].clear();
+                    std::ofstream os(std::to_string(index), std::ios_base::out | std::ios_base::trunc);
+                    break;
+                }
+                case 3: {
+                    std::cout << "ClearList" << std::endl;
+                    lists[index].clear();
+                    std::ofstream os(std::to_string(index), std::ios_base::out | std::ios_base::trunc);
+                    break;
+                }
+                case 4: {
+                    std::cout << "ListEmpty" << std::endl;
+                    std::cout << (lists[index].size() ? "False" : "True") << std::endl;
+                    break;
+                }
+                case 5: {
+                    std::cout << "ListLength" << std::endl;
+                    std::cout << lists[index].length() << std::endl;
+                    break;
+                }
+                case 6: {
+                    std::cout << "GetElem" << std::endl;
+                    int i = 0;
+                    std::cin >> i;
+                    std::cout << lists[index].get(i) << std::endl;
+                    break;
+                }
+                case 7: {
+                    std::cout << "LocateElem" << std::endl;
+                    ElemType i;
+                    std::cin >> i;
+                    std::cout << lists[index].locate(i, [](const ElemType &a, const ElemType &b) -> bool {
+                        return a == b;
+                    }) << std::endl;
+                    break;
+                }
+                case 8: {
+                    std::cout << "PriorElem" << std::endl;
+                    ElemType i;
+                    std::cin >> i;
+                    std::cout << lists[index].prior(i) << std::endl;
+                    break;
+                }
+                case 9: {
+                    std::cout << "NextElem" << std::endl;
+                    ElemType i;
+                    std::cin >> i;
+                    std::cout << lists[index].next(i) << std::endl;
+                    break;
+                }
+                case 10: {
+                    std::cout << "listsInsert" << std::endl;
+                    int i = 0;
+                    ElemType v;
+                    std::cin >> i;
+                    std::cin >> v;
+                    lists[index].insert(i, v);
+                    break;
+                }
+                case 11: {
+                    std::cout << "ListDelete" << std::endl;
+                    int i = 0;
+                    std::cin >> i;
+                    std::cout << lists[index].remove(i) << std::endl;
+                    break;
+                }
+                case 12: {
+                    std::cout << "ListTraverse" << std::endl;
+                    lists[index].traverse([](const ElemType &e) -> void { std::cout << e << std::endl; });
+                    std::cout << std::endl;
+                    break;
+                }
+                case 13: {
+                    std::cout << "Push" << std::endl;
+                    ElemType v;
+                    std::cin >> lists[index];
+                    break;
+                }
+                case 14: {
+                    std::cout << "Pop" << std::endl;
+                    ElemType v = lists[index].remove(lists->length());
+                    std::cout << v << std::endl;
+                    break;
+                }
+                case 15: {
+                    std::cout << "Save" << std::endl;
+                    lists[index].save(std::to_string(index) + ".sav");
+                    break;
+                }
+                case 16: {
+                    std::cout << "Load" << std::endl;
+                    lists[index].clear();
+                    lists[index].load(std::to_string(index) + ".sav");
+                    break;
+                }
+                case 20 : {
+                    std::cout << "ChangeIndex" << std::endl;
+                    std::cin >> index;
+                    continue;
+                }
+                default: {
+                    break;
+                }
+            }
+        } catch (std::exception &e) {
+            std::cout << "RuntimeException: " << e.what() << std::endl;
+        }
+    }
 }
-
-template<typename T>
-auto InitList(List<T> &list) -> void {
-    list = List<T>();
-}
-
-template<typename T>
-auto DestroyList(List<T> &list) -> void {
-    InitList(list);
-};
-
-template<typename T>
-auto ClearList(List<T> &list) -> void {
-    list.clear();
-};
-
-template<typename T>
-auto ListEmpty(List<T> &list) -> bool {
-    return list.empty();
-};
-
-template<typename T>
-auto ListLength(List<T> &list) -> size_t {
-    return list.length();
-};
-
-template<typename T>
-auto GetElem(List<T> &list, std::size_t index, T &e) -> void {
-    e = list.get(index);
-    return;
-};
-
-template<typename T>
-auto LocateElem(List<T> &list, const T &e, std::function<bool(const T &, const T &)> &&eq) -> int {
-    return list.locate(e, std::move(eq));
-};
-
-template<typename T>
-auto PriorElem(List<T> &list, const T &cur_e, T &pre_e) -> void {
-    pre_e = list.prior(cur_e);
-};
-
-template<typename T>
-auto NextElem(List<T> &list, const T &cur_e, T &next_e) -> void {
-    next_e = list.next(cur_e);
-};
-
-template<typename T>
-auto ListInsert(List<T> &list, std::size_t index, T &e) -> void {
-    list.insert(index, e);
-};
-
-template<typename T>
-auto ListDelete(List<T> &list, std::size_t index, T &e) -> void {
-    e = list.remove(index);
-};
-
-template<typename T>
-auto ListTraverse(List<T> &list, std::function<void(T &)> &&visit) -> void {
-    list.traverse(std::move(visit));
-};

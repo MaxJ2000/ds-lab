@@ -112,7 +112,7 @@ auto List<T>::remove(std::size_t index) -> T {
 template<typename T>
 auto List<T>::resize(std::size_t size) -> void {
     if (size < _size) {
-        throw std::length_error("resize with size" + std::to_string(size));
+        return;
     }
     auto p = std::make_unique<T[]>(size);
     auto oldElem = _elem.get();
@@ -140,7 +140,9 @@ auto List<T>::load(std::string &&f) -> void {
     std::ifstream fs;
     fs.open(f);
     T buf;
-    fs >> _size;
+    size_t tmp;
+    fs >> tmp;
+    resize(tmp);
     while (fs >> buf) {
         insert(buf);
     }
