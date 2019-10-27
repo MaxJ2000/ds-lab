@@ -69,6 +69,13 @@ public:
 
     template<typename S>
     friend std::istream &operator>>(std::istream &, ListHead<S> &);
+
+    class Iterator {
+    private:
+        ListNode<T> * _curNode;
+    public:
+        Iterator():_curNode(_ptr.get()){};
+    };
 };
 
 
