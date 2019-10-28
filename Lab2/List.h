@@ -19,7 +19,6 @@ public:
 
     explicit ListNode(T val);
 
-    T inline val() { return _val; }
 };
 
 template<typename T>
@@ -79,11 +78,11 @@ public:
 template<typename T>
 class ListHead<T>::Iterator {
 private:
-    const ListNode<T> *_curNode;
+    ListNode<T> *_curNode;
 public:
     explicit Iterator();
 
-    explicit Iterator(const ListNode<T> *);
+    explicit Iterator(ListNode<T> *);
 
     Iterator &operator=(ListNode<T> *);
 

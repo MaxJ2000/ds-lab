@@ -31,7 +31,7 @@ void ListHead<T>::clear() {
 
 template<typename T>
 T &ListHead<T>::get(std::size_t index) {
-    return _get(index)->val();
+    return _get(index)->_val;
 }
 
 template<typename T>
@@ -126,6 +126,7 @@ T ListHead<T>::remove(std::size_t pos) {
         }
     }
     _length--;
+    return out;
 }
 
 template<typename T>
@@ -142,7 +143,7 @@ template<typename T>
 ListHead<T>::Iterator::Iterator():_curNode(nullptr) {};
 
 template<typename T>
-ListHead<T>::Iterator::Iterator(const ListNode<T> *ptr):_curNode(ptr) {};
+ListHead<T>::Iterator::Iterator(ListNode<T> *ptr):_curNode(ptr) {};
 
 template<typename T>
 bool ListHead<T>::Iterator::operator!=(const ListHead<T>::Iterator &iterator) {
@@ -151,7 +152,7 @@ bool ListHead<T>::Iterator::operator!=(const ListHead<T>::Iterator &iterator) {
 
 template<typename T>
 T ListHead<T>::Iterator::operator*() {
-    return _curNode->val();
+    return _curNode->_val;
 }
 
 template<typename T>
@@ -173,4 +174,45 @@ template<typename T>
 typename ListHead<T>::Iterator &ListHead<T>::Iterator::operator=(ListNode<T> *pNode) {
     this->_curNode = pNode;
     return *this;
+}
+
+template<typename T>
+void ListHead<T>::save(std::string &&f) {
+    std::ofstream fs;
+    fs.open(f);
+    fs << _length << std::endl;
+    for (auto &&i:*this) {
+        fs << i << std::endl;
+    }
+    fs.close();
+}
+
+template<typename T>
+void ListHead<T>::load(std::string &&f) {
+    std::ifstream fs;
+    fs.open(f);
+    T buf;
+    size_t tmp;
+    fs >> tmp;
+    while (fs >> buf) {
+        insert(buf);
+    }
+    fs.close();
+}
+
+template<typename T>
+std::ostream &operator<<(std::ostream &os, const ListHead<T> &list) {
+    os << "List Length:" << list.length() << std::endl;
+    for (auto &&i:list) {
+        os << i << std::endl;
+    }
+    return os;
+}
+
+template<typename T>
+std::istream &operator>>(std::istream &in, ListHead<T> &list) {
+    T buf;
+    in >> buf;
+    list.insert(buf);
+    return in;
 }
