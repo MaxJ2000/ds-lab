@@ -13,12 +13,12 @@ ListHead<T>::ListHead():_length(0), _next(nullptr) {};
 
 template<typename T>
 ListNode<T> *ListHead<T>::_get(std::size_t index) {
-    T *tmp = nullptr;
+    ListNode<T> *tmp = nullptr;
     if (_length == 0 || index > _length) {
         throw std::overflow_error("get index: " + std::to_string(index));
     }
     for (std::size_t i = 0; i <= index; i++) {
-        tmp = ptr().get();
+        tmp = _next.get();
     }
     return tmp;
 }
@@ -85,7 +85,7 @@ void ListHead<T>::insert(std::size_t pos, const T &e) {
             curNode->_next = std::make_unique<ListNode<T>>(e);
         } else {
             std::unique_ptr<ListNode<T>> tmp = std::make_unique<ListNode<T>>(e);
-            tmp.get()->_next = std::move(curNode->_ptr);
+            tmp.get()->_next = std::move(curNode->_next);
             curNode->_next = std::move(tmp);
         }
     } else {

@@ -12,17 +12,14 @@
 
 template<typename T>
 class ListNode {
-private:
-    T _val;
-    std::unique_ptr<ListNode<T>> _next;
 public:
+    T _val;
+
+    std::unique_ptr<ListNode<T>> _next;
+
     explicit ListNode(T val);
 
     T inline val() { return _val; }
-
-    class ListHead;
-
-    friend class ListHead;
 };
 
 template<typename T>
@@ -38,9 +35,7 @@ public:
 
     bool inline empty() { return _length == 0; };
 
-    std::unique_ptr<ListNode<T>> inline ptr() { return _next; };
-
-    [[nodiscard]] size_t length() const { return _length; }
+    [[nodiscard]] size_t inline length() const { return _length; }
 
     void clear();
 
@@ -84,7 +79,7 @@ public:
 template<typename T>
 class ListHead<T>::Iterator {
 private:
-    ListNode<T> *_curNode;
+    const ListNode<T> *_curNode;
 public:
     explicit Iterator();
 
