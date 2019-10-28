@@ -14,20 +14,22 @@ template<typename T>
 class ListNode {
 private:
     T _val;
-    std::unique_ptr<ListNode<T>> _ptr;
+    std::unique_ptr<ListNode<T>> _next;
 public:
     explicit ListNode(T val);
 
     T inline val() { return _val; }
 
-    std::unique_ptr<ListNode<T>> inline ptr() { return _ptr; }
+    class ListHead;
+
+    friend class ListHead;
 };
 
 template<typename T>
 class ListHead {
 private:
     std::size_t _length;
-    std::unique_ptr<ListNode<T>> _ptr;
+    std::unique_ptr<ListNode<T>> _next;
 
     ListNode<T> *_get(size_t);
 
@@ -36,7 +38,7 @@ public:
 
     bool inline empty() { return _length == 0; };
 
-    std::unique_ptr<ListNode<T>> inline ptr() { return _ptr; };
+    std::unique_ptr<ListNode<T>> inline ptr() { return _next; };
 
     [[nodiscard]] size_t length() const { return _length; }
 
@@ -54,9 +56,9 @@ public:
 
     void traverse(std::function<void(T &)> &&);
 
-    void insert(const T &);
-
     void insert(std::size_t, const T &);
+
+    void insert(const T &);
 
     T remove(std::size_t);
 
@@ -64,19 +66,39 @@ public:
 
     void load(std::string &&);
 
+    class Iterator;
+
+    Iterator begin();
+
+    Iterator end();
+
     template<typename S>
     friend std::ostream &operator<<(std::ostream &, const ListHead<S> &);
 
     template<typename S>
     friend std::istream &operator>>(std::istream &, ListHead<S> &);
 
-    class Iterator {
-    private:
-        ListNode<T> * _curNode;
-    public:
-        Iterator():_curNode(_ptr.get()){};
-    };
+
 };
 
+template<typename T>
+class ListHead<T>::Iterator {
+private:
+    ListNode<T> *_curNode;
+public:
+    explicit Iterator();
+
+    explicit Iterator(const ListNode<T> *);
+
+    Iterator &operator=(ListNode<T> *);
+
+    Iterator &operator++();
+
+    Iterator &operator++(int);
+
+    bool operator!=(const Iterator &);
+
+    T operator*();
+};
 
 #endif //LAB2_LIST_H

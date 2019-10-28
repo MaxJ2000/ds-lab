@@ -1,4 +1,7 @@
 #include <iostream>
 #include "List.cpp"
 
-int main() {}
+int main() {
+    ListHead<std::string> test;
+    test.insert("test");
+}
