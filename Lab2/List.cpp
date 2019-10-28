@@ -17,8 +17,9 @@ ListNode<T> *ListHead<T>::_get(std::size_t index) {
     if (_length == 0 || index > _length) {
         throw std::overflow_error("get index: " + std::to_string(index));
     }
-    for (std::size_t i = 0; i <= index; i++) {
-        tmp = _next.get();
+    tmp = _next.get();
+    for (std::size_t i = 1; i <= index; i++) {
+        tmp = tmp->_next.get();
     }
     return tmp;
 }
@@ -106,11 +107,11 @@ void ListHead<T>::insert(const T &e) {
 }
 
 template<typename T>
-T ListHead<T>::remove(std::size_t pos) {
+T &&ListHead<T>::remove(std::size_t pos) {
     if (pos < 0 || _length <= pos) {
         throw std::overflow_error("get index: " + std::to_string(pos));
     }
-    T out = get(pos);
+    T &&out = std::move(get(pos));
     if (pos == 0) {
         if (_length == 1) {
             _next.reset(nullptr);
@@ -126,7 +127,7 @@ T ListHead<T>::remove(std::size_t pos) {
         }
     }
     _length--;
-    return out;
+    return std::move(out);
 }
 
 template<typename T>
@@ -151,7 +152,7 @@ bool ListHead<T>::Iterator::operator!=(const ListHead<T>::Iterator &iterator) {
 }
 
 template<typename T>
-T ListHead<T>::Iterator::operator*() {
+T &ListHead<T>::Iterator::operator*() {
     return _curNode->_val;
 }
 

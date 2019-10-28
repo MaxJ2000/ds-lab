@@ -54,7 +54,7 @@ public:
 
     void insert(const T &);
 
-    T remove(std::size_t);
+    T&& remove(std::size_t);
 
     void save(std::string &&);
 
@@ -92,7 +92,7 @@ public:
 
     bool operator!=(const Iterator &);
 
-    T operator*();
+    T &operator*();
 };
 
 #endif //LAB2_LIST_H
