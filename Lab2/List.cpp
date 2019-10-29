@@ -42,8 +42,13 @@ T &ListHead<T>::operator[](std::size_t index) {
 
 template<typename T>
 std::size_t ListHead<T>::locate(const T e, std::function<bool(const T &, const T &)> &&eq) {
-    for (std::size_t i = 0; i < _length; i++) {
-        if (eq(e, get(i))) {
+    ListNode<T> *tmp = _get(0);
+    if (eq(e, tmp->val())) {
+        return 0;
+    }
+    for (std::size_t i = 1; i < _length; i++) {
+        tmp = tmp->_next.get();
+        if (eq(e, tmp->val())) {
             return i;
         }
     }
@@ -52,20 +57,40 @@ std::size_t ListHead<T>::locate(const T e, std::function<bool(const T &, const T
 
 template<typename T>
 const T &ListHead<T>::prior(const T &e) {
-    std::size_t pos = locate(e, [](const T &a, const T &b) { return a == b; });
-    if (pos <= 0) {
-        throw std::overflow_error("get index: " + std::to_string(pos));
+//    std::size_t pos = locate(e, [](const T &a, const T &b) { return a == b; });
+//    if (pos <= 0) {
+//        throw std::overflow_error("get index: " + std::to_string(pos));
+//    }
+//    return get(pos - 1);
+    ListNode<T> *tmp1 = _next.get();
+    ListNode<T> *tmp2 = nullptr;
+    for (std::size_t i = 1; i < length(); i++) {
+        tmp2 = tmp1;
+        tmp1 = tmp1->_next.get();
+        if (tmp1->val() == e) {
+            return tmp2->val();
+        }
     }
-    return get(pos - 1);
+    throw std::runtime_error("failed to find prior");
 }
 
 template<typename T>
 const T &ListHead<T>::next(const T &e) {
-    std::size_t pos = locate(e, [](const T &a, const T &b) { return a == b; });
-    if (pos == _length) {
-        throw std::overflow_error("get index: " + std::to_string(pos));
+//    std::size_t pos = locate(e, [](const T &a, const T &b) { return a == b; });
+//    if (pos == _length) {
+//        throw std::overflow_error("get index: " + std::to_string(pos));
+//    }
+//    return get(pos + 1);
+    ListNode<T> *tmp1 = _next.get();
+    ListNode<T> *tmp2 = nullptr;
+    for (std::size_t i = 1; i < length(); i++) {
+        tmp2 = tmp1;
+        tmp1 = tmp1->_next.get();
+        if (tmp2->val() == e) {
+            return tmp1->val();
+        }
     }
-    return get(pos + 1);
+    throw std::runtime_error("failed to find next");
 }
 
 template<typename T>
@@ -111,8 +136,9 @@ T ListHead<T>::remove(std::size_t pos) {
     if (pos < 0 || _length <= pos) {
         throw std::overflow_error("get index: " + std::to_string(pos));
     }
-    const T out = _get(pos)->_val;
+    T out;
     if (pos == 0) {
+        out = get(0);
         if (_length == 1) {
             _next.reset(nullptr);
         } else {
@@ -120,6 +146,7 @@ T ListHead<T>::remove(std::size_t pos) {
         }
     } else {
         ListNode<T> *curNode = _get(pos - 1);
+        out = curNode->_next.get()->val();
         if (_length == pos + 1) {
             curNode->_next.reset(nullptr);
         } else {
