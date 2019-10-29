@@ -6,14 +6,14 @@
 #include <fstream>
 
 template<typename T>
-ListNode<T>::ListNode(T val):_next(nullptr), _val(val) {};
+ListHead<T>::ListNode::ListNode(T val):_val(val), _next(nullptr) {};
 
 template<typename T>
 ListHead<T>::ListHead():_length(0), _next(nullptr) {};
 
 template<typename T>
-ListNode<T> *ListHead<T>::_get(std::size_t index) {
-    ListNode<T> *tmp = nullptr;
+typename ListHead<T>::ListNode *ListHead<T>::_get(std::size_t index) {
+    ListNode *tmp = nullptr;
     if (_length == 0 || index > _length) {
         throw std::overflow_error("get index: " + std::to_string(index));
     }
@@ -31,8 +31,8 @@ void ListHead<T>::clear() {
 }
 
 template<typename T>
-T &ListHead<T>::get(std::size_t index) {
-    return _get(index)->_val;
+const T &ListHead<T>::get(std::size_t index) {
+    return _get(index)->val();
 }
 
 template<typename T>
@@ -51,7 +51,7 @@ std::size_t ListHead<T>::locate(const T e, std::function<bool(const T &, const T
 }
 
 template<typename T>
-T &ListHead<T>::prior(const T &e) {
+const T &ListHead<T>::prior(const T &e) {
     std::size_t pos = locate(e, [](const T &a, const T &b) { return a == b; });
     if (pos <= 0) {
         throw std::overflow_error("get index: " + std::to_string(pos));
@@ -60,7 +60,7 @@ T &ListHead<T>::prior(const T &e) {
 }
 
 template<typename T>
-T &ListHead<T>::next(const T &e) {
+const T &ListHead<T>::next(const T &e) {
     std::size_t pos = locate(e, [](const T &a, const T &b) { return a == b; });
     if (pos == _length) {
         throw std::overflow_error("get index: " + std::to_string(pos));
@@ -81,19 +81,19 @@ void ListHead<T>::insert(std::size_t pos, const T &e) {
         throw std::overflow_error("get pos: " + std::to_string(pos));
     }
     if (pos != 0) {
-        ListNode<T> *curNode = _get(pos - 1);
+        ListNode *curNode = _get(pos - 1);
         if (curNode->_next == nullptr) {
-            curNode->_next = std::make_unique<ListNode<T>>(e);
+            curNode->_next = std::make_unique<ListNode>(e);
         } else {
-            std::unique_ptr<ListNode<T>> tmp = std::make_unique<ListNode<T>>(e);
+            std::unique_ptr<ListNode> tmp = std::make_unique<ListNode>(e);
             tmp.get()->_next = std::move(curNode->_next);
             curNode->_next = std::move(tmp);
         }
     } else {
         if (_next == nullptr) {
-            _next = std::make_unique<ListNode<T>>(e);
+            _next = std::make_unique<ListNode>(e);
         } else {
-            std::unique_ptr<ListNode<T>> tmp = std::make_unique<ListNode<T>>(e);
+            std::unique_ptr<ListNode> tmp = std::make_unique<ListNode>(e);
             tmp.get()->_next = std::move(_next);
             _next = std::move(tmp);
         }
@@ -107,11 +107,11 @@ void ListHead<T>::insert(const T &e) {
 }
 
 template<typename T>
-T &&ListHead<T>::remove(std::size_t pos) {
+const T ListHead<T>::remove(std::size_t pos) {
     if (pos < 0 || _length <= pos) {
         throw std::overflow_error("get index: " + std::to_string(pos));
     }
-    T &&out = std::move(get(pos));
+    const T out = _get(pos)->_val;
     if (pos == 0) {
         if (_length == 1) {
             _next.reset(nullptr);
@@ -119,7 +119,7 @@ T &&ListHead<T>::remove(std::size_t pos) {
             _next = std::move(_next.get()->_next);
         }
     } else {
-        ListNode<T> *curNode = _get(pos - 1);
+        ListNode *curNode = _get(pos - 1);
         if (_length == pos + 1) {
             curNode->_next.reset(nullptr);
         } else {
@@ -127,7 +127,7 @@ T &&ListHead<T>::remove(std::size_t pos) {
         }
     }
     _length--;
-    return std::move(out);
+    return out;
 }
 
 template<typename T>
@@ -144,7 +144,7 @@ template<typename T>
 ListHead<T>::Iterator::Iterator():_curNode(nullptr) {};
 
 template<typename T>
-ListHead<T>::Iterator::Iterator(ListNode<T> *ptr):_curNode(ptr) {};
+ListHead<T>::Iterator::Iterator(ListNode *ptr):_curNode(ptr) {};
 
 template<typename T>
 bool ListHead<T>::Iterator::operator!=(const ListHead<T>::Iterator &iterator) {
@@ -172,7 +172,7 @@ typename ListHead<T>::Iterator &ListHead<T>::Iterator::operator++(int) {
 }
 
 template<typename T>
-typename ListHead<T>::Iterator &ListHead<T>::Iterator::operator=(ListNode<T> *pNode) {
+typename ListHead<T>::Iterator &ListHead<T>::Iterator::operator=(ListNode *pNode) {
     this->_curNode = pNode;
     return *this;
 }

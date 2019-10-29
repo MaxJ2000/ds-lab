@@ -1,5 +1,6 @@
 #include <iostream>
 #include "List.cpp"
+
 typedef std::string ElemType;
 
 void displayMenu(int index) {
@@ -115,8 +116,7 @@ int main() {
                 }
                 case 14: {
                     std::cout << "Pop" << std::endl;
-                    ElemType v = lists[index].remove(lists[index].length()-1);
-                    std::cout << v << std::endl;
+                    std::cout << lists[index].remove(lists[index].length() - 1)<< std::endl;
                     break;
                 }
                 case 15: {
