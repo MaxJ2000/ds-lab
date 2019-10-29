@@ -6,14 +6,14 @@
 #include <fstream>
 
 template<typename T>
-ListHead<T>::ListNode::ListNode(T val):_val(val), _next(nullptr) {};
+ListNode<T>::ListNode(T val):_val(val), _next(nullptr) {};
 
 template<typename T>
 ListHead<T>::ListHead():_length(0), _next(nullptr) {};
 
 template<typename T>
-typename ListHead<T>::ListNode *ListHead<T>::_get(std::size_t index) {
-    ListNode *tmp = nullptr;
+ListNode<T> *ListHead<T>::_get(std::size_t index) {
+    ListNode<T> *tmp = nullptr;
     if (_length == 0 || index > _length) {
         throw std::overflow_error("get index: " + std::to_string(index));
     }
@@ -81,19 +81,19 @@ void ListHead<T>::insert(std::size_t pos, const T &e) {
         throw std::overflow_error("get pos: " + std::to_string(pos));
     }
     if (pos != 0) {
-        ListNode *curNode = _get(pos - 1);
+        ListNode<T> *curNode = _get(pos - 1);
         if (curNode->_next == nullptr) {
-            curNode->_next = std::make_unique<ListNode>(e);
+            curNode->_next = std::make_unique<ListNode<T>>(e);
         } else {
-            std::unique_ptr<ListNode> tmp = std::make_unique<ListNode>(e);
+            std::unique_ptr<ListNode<T>> tmp = std::make_unique<ListNode<T>>(e);
             tmp.get()->_next = std::move(curNode->_next);
             curNode->_next = std::move(tmp);
         }
     } else {
         if (_next == nullptr) {
-            _next = std::make_unique<ListNode>(e);
+            _next = std::make_unique<ListNode<T>>(e);
         } else {
-            std::unique_ptr<ListNode> tmp = std::make_unique<ListNode>(e);
+            std::unique_ptr<ListNode<T>> tmp = std::make_unique<ListNode<T>>(e);
             tmp.get()->_next = std::move(_next);
             _next = std::move(tmp);
         }
@@ -107,7 +107,7 @@ void ListHead<T>::insert(const T &e) {
 }
 
 template<typename T>
-const T ListHead<T>::remove(std::size_t pos) {
+T ListHead<T>::remove(std::size_t pos) {
     if (pos < 0 || _length <= pos) {
         throw std::overflow_error("get index: " + std::to_string(pos));
     }
@@ -119,7 +119,7 @@ const T ListHead<T>::remove(std::size_t pos) {
             _next = std::move(_next.get()->_next);
         }
     } else {
-        ListNode *curNode = _get(pos - 1);
+        ListNode<T> *curNode = _get(pos - 1);
         if (_length == pos + 1) {
             curNode->_next.reset(nullptr);
         } else {
@@ -131,33 +131,33 @@ const T ListHead<T>::remove(std::size_t pos) {
 }
 
 template<typename T>
-typename ListHead<T>::Iterator ListHead<T>::begin() {
+Iterator<T> ListHead<T>::begin() {
     return Iterator(_next.get());
 }
 
 template<typename T>
-typename ListHead<T>::Iterator ListHead<T>::end() {
-    return Iterator(nullptr);
+Iterator<T> ListHead<T>::end() {
+    return Iterator<T>(nullptr);
 }
 
 template<typename T>
-ListHead<T>::Iterator::Iterator():_curNode(nullptr) {};
+Iterator<T>::Iterator():_curNode(nullptr) {};
 
 template<typename T>
-ListHead<T>::Iterator::Iterator(ListNode *ptr):_curNode(ptr) {};
+Iterator<T>::Iterator(ListNode<T> *ptr):_curNode(ptr) {};
 
 template<typename T>
-bool ListHead<T>::Iterator::operator!=(const ListHead<T>::Iterator &iterator) {
+bool Iterator<T>::operator!=(const Iterator<T> &iterator) {
     return _curNode != iterator._curNode;
 }
 
 template<typename T>
-T &ListHead<T>::Iterator::operator*() {
+T &Iterator<T>::operator*() {
     return _curNode->_val;
 }
 
 template<typename T>
-typename ListHead<T>::Iterator &ListHead<T>::Iterator::operator++() {
+Iterator<T> &Iterator<T>::operator++() {
     if (_curNode != nullptr) {
         _curNode = _curNode->_next.get();
     }
@@ -165,14 +165,14 @@ typename ListHead<T>::Iterator &ListHead<T>::Iterator::operator++() {
 }
 
 template<typename T>
-typename ListHead<T>::Iterator &ListHead<T>::Iterator::operator++(int) {
+Iterator<T> &Iterator<T>::operator++(int) {
     Iterator iterator = *this;
     ++*this;
     return *this;
 }
 
 template<typename T>
-typename ListHead<T>::Iterator &ListHead<T>::Iterator::operator=(ListNode *pNode) {
+Iterator<T> &Iterator<T>::operator=(ListNode<T> *pNode) {
     this->_curNode = pNode;
     return *this;
 }

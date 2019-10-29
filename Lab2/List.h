@@ -10,29 +10,62 @@
 #include <memory>
 #include <string>
 
+template<typename T>
+class ListHead;
 
 template<typename T>
-class ListHead {
+class Iterator;
+
+template<typename T>
+class ListNode {
 private:
-    std::size_t _length;
-
-    class ListNode {
-    private:
-        T _val;
-
-        std::unique_ptr<ListNode> _next;
-
-    public:
-        explicit ListNode(T val);
-
-        [[nodiscard]]inline const T &val() const { return _val; }
-
-        friend class ListHead<T>;
-    };
+    T _val;
 
     std::unique_ptr<ListNode> _next;
 
-    ListNode *_get(size_t);
+public:
+    explicit ListNode(T val);
+
+    [[nodiscard]]inline const T &val() const { return _val; }
+
+    friend class ListHead<T>;
+
+    friend class Iterator<T>;
+
+};
+
+template<typename T>
+class Iterator {
+private:
+    ListNode<T> *_curNode;
+public:
+    explicit Iterator();
+
+    explicit Iterator(ListNode<T> *);
+
+    Iterator &operator=(ListNode<T> *);
+
+    Iterator &operator++();
+
+    Iterator &operator++(int);
+
+    bool operator!=(const Iterator &);
+
+    T &operator*();
+
+
+};
+
+
+template<typename T>
+class ListHead {
+
+private:
+    std::size_t _length;
+
+    std::unique_ptr<ListNode<T>> _next;
+
+    ListNode<T> *_get(size_t);
 
 public:
     ListHead();
@@ -59,41 +92,21 @@ public:
 
     void insert(const T &);
 
-    const T remove(std::size_t);
+    T remove(std::size_t);
 
     void save(std::string &&);
 
     void load(std::string &&);
 
-    class Iterator {
-    private:
-        ListNode *_curNode;
-    public:
-        explicit Iterator();
+    Iterator<T> begin();
 
-        explicit Iterator(ListNode *);
-
-        Iterator &operator=(ListNode *);
-
-        Iterator &operator++();
-
-        Iterator &operator++(int);
-
-        bool operator!=(const Iterator &);
-
-        T &operator*();
-    };
-
-    Iterator begin();
-
-    Iterator end();
+    Iterator<T> end();
 
     template<typename S>
     friend std::ostream &operator<<(std::ostream &, const ListHead<S> &);
 
     template<typename S>
     friend std::istream &operator>>(std::istream &, ListHead<S> &);
-
 
 };
 
