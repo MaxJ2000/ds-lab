@@ -9,7 +9,7 @@ List<T>::List(std::size_t size)
         : _length(0), _size(size), _elem(std::make_unique<T[]>(size)) {}
 
 template<typename T>
-auto List<T>::operator[](std::size_t index) -> T & {
+T &List<T>::operator[](std::size_t index) {
     if (index >= _size) {
         throw std::overflow_error("get index: " + std::to_string(index));
     }
@@ -18,13 +18,13 @@ auto List<T>::operator[](std::size_t index) -> T & {
 
 
 template<typename T>
-auto List<T>::empty() -> bool {
+bool List<T>::empty() {
     return _length == 0;
 }
 
 
 template<typename T>
-auto List<T>::get(std::size_t index) -> T & {
+T &List<T>::get(std::size_t index) {
     if (index >= _size) {
         throw std::overflow_error("get index: " + std::to_string(index));
     }
@@ -32,7 +32,7 @@ auto List<T>::get(std::size_t index) -> T & {
 }
 
 template<typename T>
-auto List<T>::locate(const T e, std::function<bool(const T &, const T &)> &&eq) -> std::size_t {
+std::size_t List<T>::locate(const T e, std::function<bool(const T &, const T &)> &&eq) {
     for (std::size_t i = 0; i < _length; i++) {
         if (eq(e, _elem[i])) {
             return i;
@@ -42,7 +42,7 @@ auto List<T>::locate(const T e, std::function<bool(const T &, const T &)> &&eq) 
 }
 
 template<typename T>
-auto List<T>::prior(const T &e) -> T & {
+T &List<T>::prior(const T &e) {
     auto pos = locate(e, [](const T &a, const T &b) { return a == b; });
     if (pos <= 0) {
         throw std::overflow_error("get index: " + std::to_string(pos));
@@ -51,7 +51,7 @@ auto List<T>::prior(const T &e) -> T & {
 }
 
 template<typename T>
-auto List<T>::next(const T &e) -> T & {
+T &List<T>::next(const T &e) {
     auto pos = locate(e, [](const T &a, const T &b) { return a == b; });
     if (pos == _length) {
         throw std::overflow_error("get index: " + std::to_string(pos));
@@ -61,14 +61,14 @@ auto List<T>::next(const T &e) -> T & {
 
 
 template<typename T>
-auto List<T>::traverse(std::function<void(T &)> &&f) -> void {
+void List<T>::traverse(std::function<void(T &)> &&f) {
     for (auto &&i : *this) {
         f(i);
     }
 }
 
 template<typename T>
-auto List<T>::insert(std::size_t pos, const T &e) -> void {
+void List<T>::insert(std::size_t pos, const T &e) {
     if (pos > _size || pos < 0) {
         throw std::overflow_error("get pos: " + std::to_string(pos));
     }
@@ -89,12 +89,12 @@ auto List<T>::insert(std::size_t pos, const T &e) -> void {
 }
 
 template<typename T>
-auto List<T>::insert(const T &e) -> void {
+void List<T>::insert(const T &e) {
     insert(length(), e);
 }
 
 template<typename T>
-auto List<T>::remove(std::size_t index) -> T {
+T List<T>::remove(std::size_t index) {
     if (index < 0 || _length <= index) {
         throw std::overflow_error("get index: " + std::to_string(index));
     }
@@ -110,7 +110,7 @@ auto List<T>::remove(std::size_t index) -> T {
 
 
 template<typename T>
-auto List<T>::resize(std::size_t size) -> void {
+void List<T>::resize(std::size_t size) {
     if (size < _size) {
         return;
     }
@@ -125,7 +125,7 @@ auto List<T>::resize(std::size_t size) -> void {
 }
 
 template<typename T>
-auto List<T>::save(std::string &&f) -> void {
+void List<T>::save(std::string &&f) {
     std::ofstream fs;
     fs.open(f);
     fs << _size << std::endl;
@@ -136,7 +136,7 @@ auto List<T>::save(std::string &&f) -> void {
 }
 
 template<typename T>
-auto List<T>::load(std::string &&f) -> void {
+void List<T>::load(std::string &&f) {
     std::ifstream fs;
     fs.open(f);
     T buf;

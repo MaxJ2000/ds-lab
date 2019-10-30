@@ -159,7 +159,7 @@ T ListHead<T>::remove(std::size_t pos) {
 
 template<typename T>
 Iterator<T> ListHead<T>::begin() {
-    return Iterator(_next.get());
+    return Iterator<T>(_next.get());
 }
 
 template<typename T>
