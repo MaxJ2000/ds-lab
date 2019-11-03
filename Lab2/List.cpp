@@ -13,11 +13,10 @@ ListHead<T>::ListHead():_length(0), _next(nullptr) {};
 
 template<typename T>
 ListNode<T> *ListHead<T>::_get(std::size_t index) {
-    ListNode<T> *tmp = nullptr;
     if (_length == 0 || index > _length) {
         throw std::overflow_error("get index: " + std::to_string(index));
     }
-    tmp = _next.get();
+    auto tmp = _next.get();
     for (std::size_t i = 1; i <= index; i++) {
         tmp = tmp->_next.get();
     }
@@ -42,7 +41,7 @@ T &ListHead<T>::operator[](std::size_t index) {
 
 template<typename T>
 std::size_t ListHead<T>::locate(const T e, std::function<bool(const T &, const T &)> &&eq) {
-    ListNode<T> *tmp = _get(0);
+    auto tmp = _get(0);
     if (eq(e, tmp->val())) {
         return 0;
     }
@@ -62,8 +61,8 @@ const T &ListHead<T>::prior(const T &e) {
 //        throw std::overflow_error("get index: " + std::to_string(pos));
 //    }
 //    return get(pos - 1);
-    ListNode<T> *tmp1 = _next.get();
-    ListNode<T> *tmp2 = nullptr;
+    auto tmp1 = _next.get();
+    auto tmp2 = tmp1;
     for (std::size_t i = 1; i < length(); i++) {
         tmp2 = tmp1;
         tmp1 = tmp1->_next.get();
@@ -81,8 +80,8 @@ const T &ListHead<T>::next(const T &e) {
 //        throw std::overflow_error("get index: " + std::to_string(pos));
 //    }
 //    return get(pos + 1);
-    ListNode<T> *tmp1 = _next.get();
-    ListNode<T> *tmp2 = nullptr;
+    auto tmp1 = _next.get();
+    auto tmp2 = tmp1;
     for (std::size_t i = 1; i < length(); i++) {
         tmp2 = tmp1;
         tmp1 = tmp1->_next.get();
@@ -106,11 +105,11 @@ void ListHead<T>::insert(std::size_t pos, const T &e) {
         throw std::overflow_error("get pos: " + std::to_string(pos));
     }
     if (pos != 0) {
-        ListNode<T> *curNode = _get(pos - 1);
+        auto curNode = _get(pos - 1);
         if (curNode->_next == nullptr) {
             curNode->_next = std::make_unique<ListNode<T>>(e);
         } else {
-            std::unique_ptr<ListNode<T>> tmp = std::make_unique<ListNode<T>>(e);
+            auto tmp = std::make_unique<ListNode<T>>(e);
             tmp.get()->_next = std::move(curNode->_next);
             curNode->_next = std::move(tmp);
         }
@@ -118,7 +117,7 @@ void ListHead<T>::insert(std::size_t pos, const T &e) {
         if (_next == nullptr) {
             _next = std::make_unique<ListNode<T>>(e);
         } else {
-            std::unique_ptr<ListNode<T>> tmp = std::make_unique<ListNode<T>>(e);
+            auto tmp = std::make_unique<ListNode<T>>(e);
             tmp.get()->_next = std::move(_next);
             _next = std::move(tmp);
         }
@@ -145,7 +144,7 @@ T ListHead<T>::remove(std::size_t pos) {
             _next = std::move(_next.get()->_next);
         }
     } else {
-        ListNode<T> *curNode = _get(pos - 1);
+        auto curNode = _get(pos - 1);
         out = curNode->_next.get()->val();
         if (_length == pos + 1) {
             curNode->_next.reset(nullptr);
@@ -193,7 +192,7 @@ Iterator<T> &Iterator<T>::operator++() {
 
 template<typename T>
 Iterator<T> &Iterator<T>::operator++(int) {
-    Iterator iterator = *this;
+    auto iterator = *this;
     ++*this;
     return *this;
 }
