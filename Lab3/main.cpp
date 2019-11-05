@@ -1,8 +1,13 @@
 #include <iostream>
+#include <valarray>
 #include "BiTree.cpp"
 
 int main() {
-    TreeHead<std::string> test("ABCDEF", "CBDAFE");
-    std::cout<<test.locate(4);
+    std::vector<std::string> a{"A", "Bcddd", "C", "D", "E", "F"};
+    std::vector<std::string> b{"C", "Bcddd", "D", "A", "F", "E"};
+    TreeHead<std::string> test(a, b);
+    std::cout << test.depth();
+    auto d = test.deleteNode("A").get();
+    getchar();
     return 0;
 }

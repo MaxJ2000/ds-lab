@@ -4,50 +4,46 @@
 
 #include "BiTree.h"
 
-template<typename T>
-TreeNode<T>::TreeNode() {};
+#include <utility>
+
 
 template<typename T>
-TreeNode<T>::TreeNode(T val):_val(val) {};
+TreeNode<T>::TreeNode(nodeKey key):_key(std::move(key)) {};
 
 template<typename T>
-TreeNode<T>::TreeNode(T val, key index):_index(index), _val(val) {};
+TreeNode<T>::TreeNode(nodeKey key, T val):_key(std::move(key)), _val(val) {};
 
 template<typename T>
 TreeHead<T>::TreeHead():_root(nullptr) {};
 
 template<typename T>
-TreeHead<T>::TreeHead(std::string &&preOrderDef, std::string &&inOrderDef) {
-    auto len = preOrderDef.length();
-    if (len != inOrderDef.length()) {
-        throw std::logic_error(
-                "Defination length:" +
-                std::to_string(len)
-                + "and" +
-                std::to_string(inOrderDef.length()));
-    }
-    _root = _createTree(std::move(preOrderDef), std::move(inOrderDef));
-    _markIndex(_root.get());
-}
-
-template<typename T>
-std::unique_ptr<TreeNode<T>>
-TreeHead<T>::_createTree(std::string &&preOrderDef, std::string &&inOrderDef) {
-    auto len = preOrderDef.length();
-    auto ptr = std::make_unique<TreeNode<T>>();
-    for (unsigned i = 0; i < len; ++i) {
-        if (preOrderDef[0] == inOrderDef[i]) {
-            ptr.get()->_val = preOrderDef[0];
-            if (i != 0) {
-                ptr.get()->_leftNode = _createTree(preOrderDef.substr(1, i), inOrderDef.substr(0, i));
-            }
-            if (len - i - 1 != 0) {
-                ptr.get()->_rightNode = _createTree(preOrderDef.substr(i + 1, len - i - 1),
-                                                    inOrderDef.substr(i + 1, len - i - 1));
+TreeHead<T>::TreeHead(std::vector<nodeKey> preOrderDef, std::vector<nodeKey> inOrderDef) {
+    auto n = preOrderDef.size();
+    std::function<std::unique_ptr<TreeNode<T>>(std::size_t, std::size_t, std::size_t)>
+            createTree = [&preOrderDef, &inOrderDef, &createTree](
+            auto pos1, auto pos2, auto n) {
+        auto ptr = std::make_unique<TreeNode<T>>(preOrderDef[pos1]);
+        for (unsigned long i = 0; i < n; ++i) {
+            if (preOrderDef[pos1] == inOrderDef[pos2 + i]) {
+                if (i != 0) {
+                    ptr.get()->_leftNode = createTree(pos1 + 1, pos2, i);
+                }
+                if (n - i - 1 != 0) {
+                    ptr.get()->_rightNode = createTree(pos1 + i + 1, pos2 + i + 1, n - i - 1);
+                }
             }
         }
+        return ptr;
+    };
+    if (n != inOrderDef.size()) {
+        throw std::logic_error(
+                "Defination length:" +
+                std::to_string(n)
+                + "and" +
+                std::to_string(inOrderDef.size()));
     }
-    return ptr;
+    _root = createTree(0, 0, n);
+    _markIndex(_root.get());
 }
 
 template<typename T>
@@ -67,6 +63,8 @@ void TreeHead<T>::_markIndex(TreeNode<T> *node) {
 
 template<typename T>
 unsigned long TreeHead<T>::depth() {
+//    auto a = _locateFatherByKey("F");
+//    getchar();
     return depth(_root.get());
 }
 
@@ -86,13 +84,14 @@ unsigned long TreeHead<T>::depth(TreeNode<T> *node) {
 }
 
 template<typename T>
-const T &TreeHead<T>::locate(key index) {
+TreeNode<T> *TreeHead<T>::_locateByIndex(const nodeIndex &index) {
+    auto tmpIndex = index;
     std::vector<bool> rWay;
     auto node = _root.get();
-    while (index != 0) {
-        bool tmp = index % 2;
+    while (tmpIndex != 0) {
+        bool tmp = tmpIndex % 2;
         rWay.push_back(tmp);
-        index = (index - 1) / 2;
+        tmpIndex = (tmpIndex - 1) / 2;
     }
     for (auto rIterator = rWay.rbegin(); rIterator != rWay.rend(); rIterator++) {
         if (*rIterator) {
@@ -101,5 +100,148 @@ const T &TreeHead<T>::locate(key index) {
             node = node->_rightNode.get();
         }
     }
-    return node->val();
+    return node;
+}
+
+template<typename T>
+TreeNode<T> *TreeHead<T>::_locateByKey(const nodeKey &key) {
+    TreeNode<T> *tmp = nullptr;
+    std::function<void(TreeNode<T> *)> locateFunc = [&tmp, &key, &locateFunc](TreeNode<T> *node) {
+        if (node->_key == key) {
+            tmp = node;
+            return;
+        }
+        auto leftNode = node->_leftNode.get();
+        auto rightNode = node->_rightNode.get();
+        if (leftNode != nullptr) {
+            locateFunc(leftNode);
+        }
+        if (rightNode != nullptr) {
+            locateFunc(rightNode);
+        }
+    };
+    locateFunc(_root.get());
+    if (tmp == nullptr) {
+        throw std::runtime_error("Bad key");
+    }
+    return tmp;
+}
+
+template<typename T>
+TreeNode<T> *TreeHead<T>::_locateFatherByKey(const nodeKey &key) {
+    TreeNode<T> *tmpFather = nullptr;
+
+    std::function<void(TreeNode<T> *, TreeNode<T> *)> locateFunc = [&tmpFather, &key, &locateFunc](
+            TreeNode<T> *fatherNode,
+            TreeNode<T> *node) {
+        if (node->_key == key) {
+            tmpFather = fatherNode;
+            return;
+        }
+        auto leftNode = node->_leftNode.get();
+        auto rightNode = node->_rightNode.get();
+        if (leftNode != nullptr) {
+            locateFunc(node, leftNode);
+        }
+        if (rightNode != nullptr) {
+            locateFunc(node, rightNode);
+        }
+    };
+    locateFunc(nullptr, _root.get());
+    if (tmpFather == nullptr) {
+        throw std::runtime_error("Bad key");
+    }
+    return tmpFather;
+}
+
+template<typename T>
+void TreeHead<T>::assign(const nodeKey &key, const T &val) {
+    auto node = _locateByKey(key);
+    node->_val = val;
+}
+
+template<typename T>
+void TreeHead<T>::insert(const nodeKey &key, const bool &choice, std::unique_ptr<TreeNode<T>> targetNode) {
+    auto node = _locateByKey(key);
+    if (choice) {
+        targetNode.get()->_rightNode = std::move(node->_rightNode);
+        node->_rightNode = std::move(targetNode);
+    } else {
+        targetNode.get()->_rightNode = std::move(node->_leftNode);
+        node->_leftNode = std::move(targetNode);
+    }
+}
+
+template<typename T>
+std::unique_ptr<TreeNode<T>> TreeHead<T>::deleteNode(const nodeKey &key) {
+    std::unique_ptr<TreeNode<T>> tmpNode;
+    if (_root.get()->_key != key) {
+        auto fatherNode = _locateFatherByKey(key);
+        auto pos = fatherNode->_rightNode.get()->_key == key ? 1 : 0;
+        auto childNode = pos ?
+                         fatherNode->_rightNode.get() :
+                         fatherNode->_leftNode.get();
+        if (childNode->_leftNode == nullptr && childNode->_rightNode == nullptr) {
+            if (pos) {
+                tmpNode = std::move(fatherNode->_rightNode);
+            } else {
+                tmpNode = std::move(fatherNode->_leftNode);
+            }
+        }
+        if (childNode->_leftNode != nullptr && childNode->_rightNode == nullptr) {
+            if (pos) {
+                tmpNode = std::move(fatherNode->_rightNode);
+                fatherNode->_rightNode = std::move(childNode->_leftNode);
+            } else {
+                tmpNode = std::move(fatherNode->_leftNode);
+                fatherNode->_leftNode = std::move(childNode->_leftNode);
+            }
+        }
+        if (childNode->_rightNode != nullptr && childNode->_leftNode == nullptr) {
+            if (pos) {
+                tmpNode = std::move(fatherNode->_rightNode);
+                fatherNode->_rightNode = std::move(childNode->_rightNode);
+            } else {
+                tmpNode = std::move(fatherNode->_leftNode);
+                fatherNode->_leftNode = std::move(childNode->_rightNode);
+            }
+        }
+        if (childNode->_rightNode != nullptr && childNode->_leftNode != nullptr) {
+            auto tmp = childNode->_leftNode.get();
+            while (tmp->_rightNode != nullptr) {
+                tmp = tmp->_rightNode.get();
+            }
+            tmp->_rightNode = std::move(childNode->_rightNode);
+            if (pos) {
+                tmpNode = std::move(fatherNode->_rightNode);
+                fatherNode->_rightNode = std::move(childNode->_leftNode);
+            } else {
+                tmpNode = std::move(fatherNode->_leftNode);
+                fatherNode->_leftNode = std::move(childNode->_leftNode);
+            }
+        }
+    } else {
+        auto childNode = _root.get();
+        if (childNode->_leftNode == nullptr && childNode->_rightNode == nullptr) {
+            tmpNode = std::move(_root);
+        }
+        if (childNode->_leftNode != nullptr && childNode->_rightNode == nullptr) {
+            tmpNode = std::move(_root);
+            _root = std::move(childNode->_leftNode);
+        }
+        if (childNode->_rightNode != nullptr && childNode->_leftNode == nullptr) {
+            tmpNode = std::move(_root);
+            _root = std::move(childNode->_rightNode);
+        }
+        if (childNode->_rightNode != nullptr && childNode->_leftNode != nullptr) {
+            auto tmp = childNode->_leftNode.get();
+            while (tmp->_rightNode != nullptr) {
+                tmp = tmp->_rightNode.get();
+            }
+            tmp->_rightNode = std::move(childNode->_rightNode);
+            tmpNode = std::move(_root);
+            _root = std::move(childNode->_leftNode);
+        }
+    }
+    return tmpNode;
 }
