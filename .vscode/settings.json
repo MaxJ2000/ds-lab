@@ -1,6 +1,0 @@
-{
-    "files.associations": {
-        "*.ps1": "powershell",
-        "initializer_list": "cpp"
-    }
-}
