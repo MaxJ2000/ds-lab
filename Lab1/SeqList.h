@@ -19,44 +19,44 @@ public:
 
     explicit List(std::size_t);
 
-    [[nodiscard]] auto begin() const -> T * { return _length > 0 ? &_elem[0] : nullptr; }
+    T *begin() const { return _length > 0 ? &_elem[0] : nullptr; }
 
-    [[nodiscard]] auto end() const -> T * { return _length > 0 ? &_elem[_length] : nullptr; }
+    T *end() const { return _length > 0 ? &_elem[_length] : nullptr; }
 
-    [[nodiscard]] auto size() const { return _size; }
+    [[nodiscard]] std::size_t size() const { return _size; }
 
-    [[nodiscard]] auto length() const { return _length; }
+    [[nodiscard]] std::size_t length() const { return _length; }
 
-    [[nodiscard]] auto clear() {
+    void clear() {
         _elem.reset(new T[0]);
         _length = 0;
     }
 
-    auto empty() -> bool;
+    bool empty();
 
-    auto operator[](std::size_t) -> T &;
+    T &operator[](std::size_t);
 
-    auto get(std::size_t) -> T &;
+    T &get(std::size_t);
 
-    auto locate(T, std::function<bool(const T &, const T &)> &&) -> std::size_t;
+    std::size_t locate(T, std::function<bool(const T &, const T &)> &&);
 
-    auto prior(const T &) -> T &;
+    T &prior(const T &);
 
-    auto next(const T &) -> T &;
+    T &next(const T &);
 
-    auto traverse(std::function<void(T &)> &&) -> void;
+    void traverse(std::function<void(T &)> &&);
 
-    auto insert(const T &) -> void;
+    void insert(const T &);
 
-    auto insert(std::size_t, const T &) -> void;
+    void insert(std::size_t, const T &);
 
-    auto remove(std::size_t) -> T;
+    T remove(std::size_t);
 
-    auto resize(std::size_t) -> void;
+    void resize(std::size_t);
 
-    auto save(std::string &&) -> void;
+    void save(std::string &&);
 
-    auto load(std::string &&) -> void;
+    void load(std::string &&);
 
     template<typename S>
     friend std::ostream &operator<<(std::ostream &, const List<S> &);

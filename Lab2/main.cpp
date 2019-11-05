@@ -18,8 +18,8 @@ void displayMenu(int index) {
 }
 
 int main() {
-    int option = 1;
-    int index = 0;
+    auto option = 1;
+    auto index = 0;
     ListHead<ElemType> lists[20];
     while (option) {
         try {

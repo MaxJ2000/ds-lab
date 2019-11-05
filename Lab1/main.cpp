@@ -1,8 +1,9 @@
 #include <iostream>
 #include "SeqList.cpp"
+
 typedef std::string ElemType;
 
-auto displayMenu(int index) -> void {
+void displayMenu(int index) {
     printf("----------------------------------------\n");
     printf("** Current Index is %d **\n", index);
     printf("%-20s%-20s\n", "1. InitList", "10. ListInsert");
