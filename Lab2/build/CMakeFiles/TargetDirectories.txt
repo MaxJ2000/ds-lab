@@ -1,3 +1,0 @@
-/home/john/Documents/HomeWork/HUST-DataStruct/Lab2/build/CMakeFiles/rebuild_cache.dir
-/home/john/Documents/HomeWork/HUST-DataStruct/Lab2/build/CMakeFiles/lab2.dir
-/home/john/Documents/HomeWork/HUST-DataStruct/Lab2/build/CMakeFiles/edit_cache.dir
