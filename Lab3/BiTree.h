@@ -8,7 +8,7 @@
 #include <memory>
 #include <functional>
 
-using key=int;
+using key=unsigned long;
 using pos=bool;
 
 template<typename T>
@@ -17,20 +17,20 @@ class TreeHead;
 template<typename T>
 class TreeNode {
 private:
-    TreeNode(key);
-
-    TreeNode(key, T val);
-
     T _val;
 
     key _index;
 
     std::unique_ptr<TreeNode> _leftNode;
 
-    std::unique_ptr<TreeNode> *_rightNode;
-
-
+    std::unique_ptr<TreeNode> _rightNode;
 public:
+    TreeNode();
+
+    TreeNode(T);
+
+    TreeNode(T, key);
+
     [[nodiscard]]inline const T &val() const { return _val; }
 
     friend class TreeHead<T>;
@@ -41,31 +41,38 @@ class TreeHead {
 private:
     std::unique_ptr<TreeNode<T>> _root;
 
-    TreeNode<T> *_getSibling(key);
+    TreeNode<T> *_locate(const key &);
 
-    TreeNode <T> * _locate(key);
+    std::unique_ptr<TreeNode<T>> _createTree(std::string &&, std::string &&);
 
+    void _markIndex(TreeNode<T> *);
 
 public:
     TreeHead();
 
-    TreeHead(std::string, std::string);
+    TreeHead(std::string &&, std::string &&);
 
-    void clear();
+    void clear() {
+        _root.reset();
+    };
 
-    bool empty();
+    inline bool empty() {
+        return _root == nullptr;
+    };
 
-    int depth();
+    unsigned long depth();
+
+    unsigned long depth(TreeNode<T> *);
 
     const T &locate(key);
 
-    void assign(key, T);
+    void assign(const key &, const T &);
 
-    const T &getSibling(key);
+    const T &getSibling(const key &);
 
-    void insert(key, pos, T);
+    void insert(const key &, const pos &, const T &);
 
-    std::unique_ptr<T> deleteNode(key);
+    std::unique_ptr<T> deleteNode(const key &);
 
     void preOrderTraverse(std::function<void(const T &)> &&);
 
