@@ -71,7 +71,7 @@ public:
 
     void assign(const nodeKey &, const T &);
 
-    const T &getSibling(const nodeKey &);
+    TreeNode<T>* getSibling(const nodeKey &);
 
     void insert(const nodeKey &, const bool &, std::unique_ptr<TreeNode<T>>);
 

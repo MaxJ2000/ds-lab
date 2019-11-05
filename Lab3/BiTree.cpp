@@ -245,3 +245,10 @@ std::unique_ptr<TreeNode<T>> TreeHead<T>::deleteNode(const nodeKey &key) {
     }
     return tmpNode;
 }
+
+template<typename T>
+TreeNode<T> *TreeHead<T>::getSibling(const nodeKey &key) {
+    auto fatherNode = _locateFatherByKey(key);
+    auto pos = fatherNode->_rightNode.get()->_key == key ? 1 : 0;
+    return pos ? fatherNode->_leftNode.get() : fatherNode->_rightNode.get();
+}
