@@ -45,22 +45,6 @@ TreeHead<T>::TreeHead(std::vector<nodeKey> preOrderDef, std::vector<nodeKey> inO
                 std::to_string(inOrderDef.size()));
     }
     _root = createTree(0, 0, n);
-    _markIndex(_root.get());
-}
-
-template<typename T>
-void TreeHead<T>::_markIndex(TreeNode<T> *node) {
-    auto fIndex = node->_index;
-    auto leftNode = node->_leftNode.get();
-    auto rightNode = node->_rightNode.get();
-    if (leftNode != nullptr) {
-        leftNode->_index = fIndex * 2 + 1;
-        _markIndex(leftNode);
-    }
-    if (rightNode != nullptr) {
-        rightNode->_index = fIndex * 2 + 2;
-        _markIndex(rightNode);
-    }
 }
 
 template<typename T>
@@ -85,25 +69,6 @@ unsigned long TreeHead<T>::depth(TreeNode<T> *node) {
     return lDepth > rDepth ? lDepth : rDepth;
 }
 
-template<typename T>
-TreeNode<T> *TreeHead<T>::_locateByIndex(const nodeIndex &index) {
-    auto tmpIndex = index;
-    std::vector<bool> rWay;
-    auto node = _root.get();
-    while (tmpIndex != 0) {
-        bool tmp = tmpIndex % 2;
-        rWay.push_back(tmp);
-        tmpIndex = (tmpIndex - 1) / 2;
-    }
-    for (auto rIterator = rWay.rbegin(); rIterator != rWay.rend(); rIterator++) {
-        if (*rIterator) {
-            node = node->_leftNode.get();
-        } else {
-            node = node->_rightNode.get();
-        }
-    }
-    return node;
-}
 
 template<typename T>
 TreeNode<T> *TreeHead<T>::_locateByKey(const nodeKey &key) {

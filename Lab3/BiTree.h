@@ -20,24 +20,19 @@ class TreeNode {
 private:
     T _val;
 
-    nodeIndex _index{};
-
     nodeKey _key;
 
     std::unique_ptr<TreeNode> _leftNode;
 
     std::unique_ptr<TreeNode> _rightNode;
 public:
-    TreeNode(nodeKey);
+    explicit TreeNode(nodeKey);
 
     TreeNode(nodeKey, T);
-
-    TreeNode(nodeKey, T, nodeIndex);
 
     [[nodiscard]]inline const T &val() const { return _val; }
 
     [[nodiscard]]inline const nodeKey &key() const { return _key; }
-
 
     friend class TreeHead<T>;
 };
@@ -47,13 +42,9 @@ class TreeHead {
 private:
     std::unique_ptr<TreeNode<T>> _root;
 
-    TreeNode<T> *_locateByIndex(const nodeIndex &);
-
     TreeNode<T> *_locateByKey(const nodeKey &);
 
     TreeNode<T> *_locateFatherByKey(const nodeKey &);
-
-    void _markIndex(TreeNode<T> *);
 
 public:
     TreeHead();
