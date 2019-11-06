@@ -36,6 +36,9 @@ public:
 
     [[nodiscard]]inline const T &val() const { return _val; }
 
+    [[nodiscard]]inline const nodeKey &key() const { return _key; }
+
+
     friend class TreeHead<T>;
 };
 

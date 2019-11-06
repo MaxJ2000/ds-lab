@@ -1,10 +1,10 @@
 //
 // Created by john on 10/29/19.
 //
+#include <utility>
 
 #include "BiTree.h"
-
-#include <utility>
+#include "stack.h"
 
 
 template<typename T>
@@ -175,9 +175,9 @@ void TreeHead<T>::insert(const nodeKey &key, const bool &choice, std::unique_ptr
 template<typename T>
 std::unique_ptr<TreeNode<T>> TreeHead<T>::deleteNode(const nodeKey &key) {
     std::unique_ptr<TreeNode<T>> tmpNode;
-    if (_root.get()->_key != key) {
+    if (_root.get()->key() != key) {
         auto fatherNode = _locateFatherByKey(key);
-        auto pos = fatherNode->_rightNode.get()->_key == key ? 1 : 0;
+        auto pos = fatherNode->_rightNode.get()->key() == key ? 1 : 0;
         auto childNode = pos ?
                          fatherNode->_rightNode.get() :
                          fatherNode->_leftNode.get();
@@ -264,9 +264,28 @@ void TreeHead<T>::preOrderTraverse(std::function<void(const nodeKey &, const T &
             traverse(node->_rightNode.get());
         }
     };
+    traverse(_root.get());
 }
 
 template<typename T>
 void TreeHead<T>::inOrderTraverse(std::function<void(const nodeKey &, const T &)> &&f) {
-    std::stack
+    stack<TreeNode<T> *> stack(depth());
+    auto curNode = _root.get();
+    while (curNode != nullptr || !stack.empty()) {
+        while (curNode != nullptr) {
+            stack.push(curNode);
+            if (curNode->_leftNode == nullptr) {
+                curNode = nullptr;
+            } else {
+                curNode = curNode->_leftNode.get();
+            }
+        }
+        curNode = stack.pop();
+        f(curNode->key(), curNode->val());
+        if (curNode->_rightNode == nullptr) {
+            curNode = nullptr;
+        } else {
+            curNode = curNode->_rightNode.get();
+        }
+    }
 }

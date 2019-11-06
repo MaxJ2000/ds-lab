@@ -20,15 +20,17 @@ public:
 
     T pop();
 
+    T peek();
+
     inline std::size_t size() { return _top + 1; };
 
-    inline bool empty() { return _top == -1 };
+    inline bool empty() { return _top == -1; };
 
     inline bool full() { return _top == _capacity - 1; };
 };
 
 template<typename T>
-stack<T>::stack(std::size_t size):_capacity(size), _arr(std::make_unique<T[]>(size), _top(-1)) {};
+stack<T>::stack(std::size_t size):_capacity(size), _arr(std::make_unique<T[]>(size)), _top(-1) {};
 
 template<typename T>
 void stack<T>::push(T x) {
@@ -44,5 +46,13 @@ T stack<T>::pop() {
         throw std::underflow_error("empty!");
     }
     return _arr[_top--];
+}
+
+template<typename T>
+T stack<T>::peek(){
+    if(empty()){
+        throw std::underflow_error("empty!");
+    }
+    return _arr[_top];
 }
 #endif //LAB3_STACK_H
