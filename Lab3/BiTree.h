@@ -58,7 +58,7 @@ private:
 public:
     TreeHead();
 
-    TreeHead(std::vector<nodeKey>, std::vector<nodeKey>);
+    TreeHead(std::vector<nodeKey>, std::vector<nodeKey>, std::vector<T>);
 
     void clear() {
         _root.reset();

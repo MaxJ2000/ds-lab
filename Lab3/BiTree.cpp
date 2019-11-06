@@ -3,6 +3,7 @@
 //
 #include <utility>
 #include <queue>
+#include <fstream>
 
 #include "BiTree.h"
 #include "stack.h"
@@ -18,12 +19,12 @@ template<typename T>
 TreeHead<T>::TreeHead():_root(nullptr) {};
 
 template<typename T>
-TreeHead<T>::TreeHead(std::vector<nodeKey> preOrderDef, std::vector<nodeKey> inOrderDef) {
+TreeHead<T>::TreeHead(std::vector<nodeKey> preOrderDef, std::vector<nodeKey> inOrderDef, std::vector<T> value) {
     auto n = preOrderDef.size();
-    std::function<std::unique_ptr<TreeNode<T>>(std::size_t, std::size_t, std::size_t)>
-            createTree = [&preOrderDef, &inOrderDef, &createTree](
+    std::function<std::unique_ptr<TreeNode<T>>(std::size_t, std::size_t, std::size_t)> createTree;
+    createTree = [&preOrderDef, &inOrderDef, &value, &createTree](
             auto pos1, auto pos2, auto n) {
-        auto ptr = std::make_unique<TreeNode<T>>(preOrderDef[pos1]);
+        auto ptr = std::make_unique<TreeNode<T>>(preOrderDef[pos1], value[pos1]);
         for (unsigned long i = 0; i < n; ++i) {
             if (preOrderDef[pos1] == inOrderDef[pos2 + i]) {
                 if (i != 0) {
@@ -332,11 +333,83 @@ void TreeHead<T>::levelOrderTraverse(std::function<void(const nodeKey &, const T
             continue;
         }
         f(tmpNode->key(), tmpNode->val());
-        if(tmpNode->_leftNode!= nullptr){
+        if (tmpNode->_leftNode != nullptr) {
             queue.push(tmpNode->_leftNode.get());
         }
-        if(tmpNode->_rightNode!= nullptr){
+        if (tmpNode->_rightNode != nullptr) {
             queue.push(tmpNode->_rightNode.get());
         }
     }
+}
+
+template<typename T>
+void TreeHead<T>::save(std::string &&file) {
+    std::ofstream fs;
+    auto keySaver = [&fs](const nodeKey &key, const T &val) {
+        fs << key << std::endl;
+    };
+    auto valSaver = [&fs](const nodeKey &key, const T &val) {
+        fs << val << std::endl;
+    };
+    fs.open(file + "preOrderDef.sav");
+    preOrderTraverse(keySaver);
+    fs.close();
+    fs.open(file + "inOrderDef.sav");
+    inOrderTraverse(keySaver);
+    fs.close();
+    fs.open(file + "val.sav");
+    preOrderTraverse(valSaver);
+    fs.close();
+}
+
+template<typename T>
+void TreeHead<T>::load(std::string &&file) {
+    std::ifstream fs;
+    nodeKey keyBuf;
+    T valBuf;
+    std::vector<nodeKey> preOrderDef;
+    std::vector<nodeKey> inOrderDef;
+    std::vector<nodeKey> value;
+    fs.open(file + "preOrderDef.sav");
+    while (fs >> keyBuf) {
+        preOrderDef.push_back(keyBuf);
+    }
+    fs.close();
+    fs.open(file + "inOrderDef.sav");
+    while (fs >> keyBuf) {
+        inOrderDef.push_back(keyBuf);
+    }
+    fs.close();
+    fs.open(file + "val.sav");
+    while (fs >> valBuf) {
+        value.push_back(valBuf);
+    }
+    fs.close();
+
+    auto n = preOrderDef.size();
+    std::function<std::unique_ptr<TreeNode<T>>(std::size_t, std::size_t, std::size_t)> createTree;
+    createTree = [&preOrderDef, &inOrderDef, &value, &createTree](
+            auto pos1, auto pos2, auto n) {
+        auto ptr = std::make_unique<TreeNode<T>>(preOrderDef[pos1], value[pos1]);
+        for (unsigned long i = 0; i < n; ++i) {
+            if (preOrderDef[pos1] == inOrderDef[pos2 + i]) {
+                if (i != 0) {
+                    ptr.get()->_leftNode = createTree(pos1 + 1, pos2, i);
+                }
+                if (n - i - 1 != 0) {
+                    ptr.get()->_rightNode = createTree(pos1 + i + 1, pos2 + i + 1, n - i - 1);
+                }
+            }
+        }
+        return ptr;
+    };
+    if (n != inOrderDef.size()) {
+        throw std::logic_error(
+                "Defination length:" +
+                std::to_string(n)
+                + "and" +
+                std::to_string(inOrderDef.size()));
+    }
+    _root = createTree(0, 0, n);
+    _markIndex(_root.get());
 }
