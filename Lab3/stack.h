@@ -14,7 +14,7 @@ private:
     std::size_t _top;
     std::size_t _capacity;
 public:
-    stack(std::size_t);
+    explicit stack(std::size_t);
 
     void push(T);
 

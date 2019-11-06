@@ -289,3 +289,29 @@ void TreeHead<T>::inOrderTraverse(std::function<void(const nodeKey &, const T &)
         }
     }
 }
+
+template<typename T>
+void TreeHead<T>::postOrderTraverse(std::function<void(const nodeKey &, const T &)> &&f) {
+    stack<TreeNode<T> *> stack(depth());
+    auto curNode = _root.get();
+    TreeNode<T> *last = nullptr;
+    while (curNode != nullptr || !stack.empty()) {
+        while (curNode != nullptr) {
+            stack.push(curNode);
+            if (curNode->_leftNode == nullptr) {
+                curNode = nullptr;
+            } else {
+                curNode = curNode->_leftNode.get();
+            }
+        }
+        curNode = stack.peek();
+        if (curNode->_rightNode == nullptr || curNode->_rightNode.get() == last) {
+            stack.pop();
+            f(curNode->key(), curNode->val());
+            last = curNode;
+            curNode = nullptr;
+        } else {
+            curNode = curNode->_rightNode.get();
+        }
+    }
+}
