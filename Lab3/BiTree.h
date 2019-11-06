@@ -71,19 +71,19 @@ public:
 
     void assign(const nodeKey &, const T &);
 
-    TreeNode<T>* getSibling(const nodeKey &);
+    TreeNode<T> *getSibling(const nodeKey &);
 
     void insert(const nodeKey &, const bool &, std::unique_ptr<TreeNode<T>>);
 
     std::unique_ptr<TreeNode<T>> deleteNode(const nodeKey &);
 
-    void preOrderTraverse(std::function<void(const T &)> &&);
+    void preOrderTraverse(std::function<void(const nodeKey &, const T &)> &&);
 
-    void inOrderTraverse(std::function<void(const T &)> &&);
+    void inOrderTraverse(std::function<void(const nodeKey &, const T &)> &&);
 
-    void postOrderTraverse(std::function<void(const T &)> &&);
+    void postOrderTraverse(std::function<void(const nodeKey &, const T &)> &&);
 
-    void levelOrderTraverse(std::function<void(const T &)> &&);
+    void levelOrderTraverse(std::function<void(const nodeKey &, const T &)> &&);
 
     void save(std::string &&);
 

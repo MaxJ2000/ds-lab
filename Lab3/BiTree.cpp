@@ -252,3 +252,21 @@ TreeNode<T> *TreeHead<T>::getSibling(const nodeKey &key) {
     auto pos = fatherNode->_rightNode.get()->_key == key ? 1 : 0;
     return pos ? fatherNode->_leftNode.get() : fatherNode->_rightNode.get();
 }
+
+template<typename T>
+void TreeHead<T>::preOrderTraverse(std::function<void(const nodeKey &, const T &)> &&f) {
+    std::function<void(TreeNode<T> *)> traverse = [&f, &traverse](TreeNode<T> *node) {
+        f(node->_key, node->_val);
+        if (node->_leftNode != nullptr) {
+            traverse(node->_leftNode.get());
+        }
+        if (node->_rightNode != nullptr) {
+            traverse(node->_rightNode.get());
+        }
+    };
+}
+
+template<typename T>
+void TreeHead<T>::inOrderTraverse(std::function<void(const nodeKey &, const T &)> &&f) {
+    std::stack
+}
