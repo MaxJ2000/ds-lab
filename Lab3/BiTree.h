@@ -26,6 +26,8 @@ private:
 
     std::unique_ptr<TreeNode> _rightNode;
 public:
+    TreeNode() = default;
+
     explicit TreeNode(nodeKey);
 
     TreeNode(nodeKey, T);
@@ -56,12 +58,14 @@ public:
     };
 
     inline bool empty() {
-        return _root == nullptr;
+        return _root.get() == nullptr;
     };
 
     unsigned long depth();
 
     unsigned long depth(TreeNode<T> *);
+
+    const T &locate(const nodeKey &);
 
     void assign(const nodeKey &, const T &);
 

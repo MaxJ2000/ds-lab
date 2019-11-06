@@ -9,14 +9,15 @@
 #include "stack.h"
 
 
-template<typename T>
-TreeNode<T>::TreeNode(nodeKey key):_key(std::move(key)) {};
 
 template<typename T>
-TreeNode<T>::TreeNode(nodeKey key, T val):_key(std::move(key)), _val(val) {};
+TreeNode<T>::TreeNode(nodeKey key):_key(std::move(key)){}
 
 template<typename T>
-TreeHead<T>::TreeHead():_root(nullptr) {};
+TreeNode<T>::TreeNode(nodeKey key, T val):_key(std::move(key)), _val(val){}
+
+template<typename T>
+TreeHead<T>::TreeHead():_root() {}
 
 template<typename T>
 TreeHead<T>::TreeHead(std::vector<nodeKey> preOrderDef, std::vector<nodeKey> inOrderDef, std::vector<T> value) {
@@ -39,7 +40,7 @@ TreeHead<T>::TreeHead(std::vector<nodeKey> preOrderDef, std::vector<nodeKey> inO
     };
     if (n != inOrderDef.size()) {
         throw std::logic_error(
-                "Defination length:" +
+                "Definition length:" +
                 std::to_string(n)
                 + "and" +
                 std::to_string(inOrderDef.size()));
@@ -119,6 +120,11 @@ TreeNode<T> *TreeHead<T>::_locateFatherByKey(const nodeKey &key) {
         throw std::runtime_error("Bad key");
     }
     return tmpFather;
+}
+
+template<typename T>
+const T &TreeHead<T>::locate(const nodeKey &key) {
+    return _locateByKey(key)->val();
 }
 
 template<typename T>
@@ -215,19 +221,40 @@ std::unique_ptr<TreeNode<T>> TreeHead<T>::deleteNode(const nodeKey &key) {
 
 template<typename T>
 TreeNode<T> *TreeHead<T>::getSibling(const nodeKey &key) {
-    auto fatherNode = _locateFatherByKey(key);
-    auto pos = fatherNode->_rightNode.get()->_key == key ? 1 : 0;
-    return pos ? fatherNode->_leftNode.get() : fatherNode->_rightNode.get();
+    TreeNode<T> *tmpSibling = nullptr;
+
+    std::function<void(TreeNode<T> *, TreeNode<T> *)> locateFunc = [&key, &tmpSibling, &locateFunc](
+            TreeNode<T> *fatherNode,
+            TreeNode<T> *node) {
+        if (node->_key == key) {
+            if (fatherNode->_leftNode.get() != nullptr && fatherNode->_leftNode.get()->key() != key) {
+                tmpSibling = fatherNode->_leftNode.get();
+            } else {
+                tmpSibling = fatherNode->_rightNode.get();
+            }
+            return;
+        }
+        auto leftNode = node->_leftNode.get();
+        auto rightNode = node->_rightNode.get();
+        if (leftNode != nullptr) {
+            locateFunc(node, leftNode);
+        }
+        if (rightNode != nullptr) {
+            locateFunc(node, rightNode);
+        }
+    };
+    locateFunc(nullptr, _root.get());
+    return tmpSibling;
 }
 
 template<typename T>
 void TreeHead<T>::preOrderTraverse(std::function<void(const nodeKey &, const T &)> &&f) {
     std::function<void(TreeNode<T> *)> traverse = [&f, &traverse](TreeNode<T> *node) {
         f(node->_key, node->_val);
-        if (node->_leftNode != nullptr) {
+        if (node->_leftNode.get() != nullptr) {
             traverse(node->_leftNode.get());
         }
-        if (node->_rightNode != nullptr) {
+        if (node->_rightNode.get() != nullptr) {
             traverse(node->_rightNode.get());
         }
     };
@@ -241,19 +268,11 @@ void TreeHead<T>::inOrderTraverse(std::function<void(const nodeKey &, const T &)
     while (curNode != nullptr || !stack.empty()) {
         while (curNode != nullptr) {
             stack.push(curNode);
-            if (curNode->_leftNode == nullptr) {
-                curNode = nullptr;
-            } else {
-                curNode = curNode->_leftNode.get();
-            }
+            curNode = curNode->_leftNode.get();
         }
         curNode = stack.pop();
         f(curNode->key(), curNode->val());
-        if (curNode->_rightNode == nullptr) {
-            curNode = nullptr;
-        } else {
-            curNode = curNode->_rightNode.get();
-        }
+        curNode = curNode->_rightNode.get();
     }
 }
 
@@ -265,11 +284,7 @@ void TreeHead<T>::postOrderTraverse(std::function<void(const nodeKey &, const T 
     while (curNode != nullptr || !stack.empty()) {
         while (curNode != nullptr) {
             stack.push(curNode);
-            if (curNode->_leftNode == nullptr) {
-                curNode = nullptr;
-            } else {
-                curNode = curNode->_leftNode.get();
-            }
+            curNode = curNode->_leftNode.get();
         }
         curNode = stack.peek();
         if (curNode->_rightNode == nullptr || curNode->_rightNode.get() == last) {
@@ -287,9 +302,6 @@ template<typename T>
 void TreeHead<T>::levelOrderTraverse(std::function<void(const nodeKey &, const T &)> &&f) {
     std::queue<TreeNode<T> *> queue;
     TreeNode<T> *tmpNode;
-    if (_root.get() == nullptr) {
-        return;
-    }
     queue.push(_root.get());
     while (!queue.empty()) {
         tmpNode = queue.front();
@@ -370,11 +382,10 @@ void TreeHead<T>::load(std::string &&file) {
     };
     if (n != inOrderDef.size()) {
         throw std::logic_error(
-                "Defination length:" +
+                "Definition length:" +
                 std::to_string(n)
                 + "and" +
                 std::to_string(inOrderDef.size()));
     }
     _root = createTree(0, 0, n);
-    _markIndex(_root.get());
 }
