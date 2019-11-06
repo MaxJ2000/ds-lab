@@ -14,6 +14,9 @@ int main() {
     test.postOrderTraverse([](const nodeKey &key, const std::string &val) {
         std::cout << key;
     });
+    test.levelOrderTraverse([](const nodeKey &key, const std::string &val) {
+        std::cout << key;
+    });
     std::cout << test.depth();
     auto d = test.deleteNode("A").get();
     getchar();

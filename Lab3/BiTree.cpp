@@ -2,6 +2,7 @@
 // Created by john on 10/29/19.
 //
 #include <utility>
+#include <queue>
 
 #include "BiTree.h"
 #include "stack.h"
@@ -312,6 +313,30 @@ void TreeHead<T>::postOrderTraverse(std::function<void(const nodeKey &, const T 
             curNode = nullptr;
         } else {
             curNode = curNode->_rightNode.get();
+        }
+    }
+}
+
+template<typename T>
+void TreeHead<T>::levelOrderTraverse(std::function<void(const nodeKey &, const T &)> &&f) {
+    std::queue<TreeNode<T> *> queue;
+    TreeNode<T> *tmpNode;
+    if (_root.get() == nullptr) {
+        return;
+    }
+    queue.push(_root.get());
+    while (!queue.empty()) {
+        tmpNode = queue.front();
+        queue.pop();
+        if (tmpNode == nullptr) {
+            continue;
+        }
+        f(tmpNode->key(), tmpNode->val());
+        if(tmpNode->_leftNode!= nullptr){
+            queue.push(tmpNode->_leftNode.get());
+        }
+        if(tmpNode->_rightNode!= nullptr){
+            queue.push(tmpNode->_rightNode.get());
         }
     }
 }
