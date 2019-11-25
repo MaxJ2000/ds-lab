@@ -1,6 +1,6 @@
 #include <iostream>
 #include <iomanip>
-#include "graph.h"
+#include "graph.cpp"
 
 using ElemType=std::string;
 
@@ -106,20 +106,28 @@ int main() {
                     lists[index].removeArc(firKey, secKey);
                     break;
                 }
-//                case 11: {
-//                    std::cout << "PreOrderTraverse" << std::endl;
-//                    lists[index].preOrderTraverse([](const nodeKey &key, const ElemType &val) {
-//                        std::cout << std::left << std::setw(20) << key << val << std::endl;
-//                    });
-//                    break;
-//                }
-//                case 12: {
-//                    std::cout << "inOrderTraverse" << std::endl;
-//                    lists[index].inOrderTraverse([](const nodeKey &key, const ElemType &val) {
-//                        std::cout << std::left << std::setw(20) << key << val << std::endl;
-//                    });
-//                    break;
-//                }
+                case 11: {
+                    std::cout << "DFSTraverse" << std::endl;
+                    lists[index].DFSTraverse([](GraphNode<ElemType> &node) {
+                        std::cout << "Key: " << node.key() << " Val: " << node.val() << " Adjacency Key:";
+                        node.traverse([](VexNode &vexNode) {
+                            std::cout << vexNode.key() << " ";
+                        });
+                        std::cout << std::endl;
+                    });
+                    break;
+                }
+                case 12: {
+                    std::cout << "DFSTraverse" << std::endl;
+                    lists[index].BFSTraverse([](GraphNode<ElemType> &node) {
+                        std::cout << "Key: " << node.key() << " Val: " << node.val() << " Adjacency Key:";
+                        node.traverse([](VexNode &vexNode) {
+                            std::cout << vexNode.key() << " ";
+                        });
+                        std::cout << std::endl;
+                    });
+                    break;
+                }
 //                case 13: {
 //                    std::cout << "postOrderTraverse" << std::endl;
 //                    lists[index].postOrderTraverse([](const nodeKey &key, const ElemType &val) {

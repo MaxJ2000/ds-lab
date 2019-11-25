@@ -34,7 +34,9 @@ public:
 
     explicit VexNode(nodeKey);
 
-    void traverse(std::function<void(nodeKey &, VexNode *)> &&);
+    inline nodeKey &key() { return _key; };
+
+    void traverse(std::function<void(VexNode &)> &&);
 
     template<typename T>
     friend
@@ -58,9 +60,11 @@ public:
 
     GraphNode(nodeKey, T);
 
-    void traverse(std::function<void(nodeKey &, VexNode *)> &&);
+    void traverse(std::function<void(VexNode &)> &&);
 
     inline T &val() { return _val; };
+
+    inline nodeKey &key() { return _key; };
 
     friend class GraphHead<T>;
 };
@@ -73,7 +77,7 @@ using arcSet=std::vector<std::array<nodeKey, 2>>;
 template<typename T>
 class GraphHead {
 private:
-    std::unordered_map<nodeKey, GraphNode<T>> _nodeMap;
+    std::unordered_map<nodeKey, GraphNode<T>&&> _nodeMap;
 
     int _nodeCount;
 
@@ -94,7 +98,7 @@ public:
 
     const nodeKey &nextAdjVex(const nodeKey &, const nodeKey &);
 
-    void insertVex(GraphNode<T> &&);
+    void insertVex(GraphNode<T>&&);
 
     void removeVex(const nodeKey &);
 
