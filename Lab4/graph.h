@@ -11,7 +11,9 @@
 #include <unordered_map>
 #include <vector>
 #include <array>
+#include <stack>
 #include <utility>
+#include <queue>
 
 
 using nodeKey=std::string;
@@ -27,13 +29,12 @@ private:
     nodeKey _key;
 
     std::unique_ptr<VexNode> _nextNode;
-
-    inline VexNode *_next() { return _nextNode.get(); };
-
 public:
     VexNode();
 
     explicit VexNode(nodeKey);
+
+    void traverse(std::function<void(nodeKey &, VexNode *)> &&);
 
     template<typename T>
     friend
@@ -57,7 +58,9 @@ public:
 
     GraphNode(nodeKey, T);
 
-    inline const nodeKey &key() { return _key };
+    void traverse(std::function<void(nodeKey &, VexNode *)> &&);
+
+    inline T &val() { return _val; };
 
     friend class GraphHead<T>;
 };
@@ -74,34 +77,34 @@ private:
 
     int _nodeCount;
 
-    void removeSingleArc(const nodeKey &,const  nodeKey &);
+    void removeSingleArc(const nodeKey &, const nodeKey &);
 
 public:
     GraphHead();
 
-    GraphHead(nodeSet<T>, arcSet);
+    GraphHead(const nodeSet<T> &, const arcSet &);
 
     inline void clear() { _nodeMap.clear(); };
 
-    GraphNode<T> &locate(nodeKey &);
+    GraphNode<T> &locate(const nodeKey &);
 
-    void assignVex(nodeKey &, T);
+    void assignVex(const nodeKey &, T);
 
-    const nodeKey &firstAdjVex(nodeKey &);
+    const nodeKey &firstAdjVex(const nodeKey &);
 
-    const nodeKey &nextAdjVex(nodeKey &, nodeKey &);
+    const nodeKey &nextAdjVex(const nodeKey &, const nodeKey &);
 
     void insertVex(GraphNode<T> &&);
 
-    void removeVex(nodeKey &);
+    void removeVex(const nodeKey &);
 
-    void insertArc(nodeKey, nodeKey);
+    void insertArc(const nodeKey &, const nodeKey &);
 
-    void removeArc(const nodeKey&, const nodeKey&);
+    void removeArc(const nodeKey &, const nodeKey &);
 
-    void DFSTraverse(std::function<void(GraphNode<T> &)>);
+    void DFSTraverse(std::function<void(GraphNode<T> &)> &&);
 
-    void BFSTraverse(std::function<void(GraphNode<T> &)>);
+    void BFSTraverse(std::function<void(GraphNode<T> &)> &&);
 };
 
 #endif //LAB4_GRAPH_H
