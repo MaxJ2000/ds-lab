@@ -5,6 +5,14 @@
 #include <fstream>
 #include "graph.h"
 
+
+ void VexNode::traverse(std::function<void(VexNode &)> &&visit) {
+    visit(*this);
+    if (_nextNode != nullptr) {
+        _nextNode->traverse(std::move(visit));
+    }
+}
+
 template<typename T>
 GraphNode<T>::GraphNode() = default;
 

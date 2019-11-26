@@ -28,6 +28,7 @@ private:
     nodeKey _key;
 
     std::unique_ptr<VexNode> _nextNode;
+
 public://Why???Define inline is ok,but in cpp is multiple???
     VexNode() = default;
 
@@ -35,12 +36,7 @@ public://Why???Define inline is ok,but in cpp is multiple???
 
     inline const nodeKey &key() const { return _key; };
 
-    void traverse(std::function<void(VexNode &)> &&visit) {
-        visit(*this);
-        if (_nextNode != nullptr) {
-            _nextNode->traverse(std::move(visit));
-        }
-    }
+    void traverse(std::function<void(VexNode &)> &&visit);
 
     template<typename T>
     friend
