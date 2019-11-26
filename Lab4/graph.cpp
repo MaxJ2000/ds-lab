@@ -81,7 +81,7 @@ void GraphHead<T>::removeSingleArc(const nodeKey &firKey, const nodeKey &secKey)
         node._nextNode = std::move(ptr->_nextNode);
     }
     node.traverse([&secKey](VexNode &vexNode) {
-        if (vexNode._nextNode->_key == secKey) {
+        if (vexNode._nextNode != nullptr && vexNode._nextNode->_key == secKey) {
             vexNode._nextNode = std::move(vexNode._nextNode->_nextNode);
         }
     });
@@ -107,7 +107,7 @@ void GraphHead<T>::removeVex(const nodeKey &key) {
 //        removeSingleArc(ptr->_key, key);
 //        ptr = ptr->_nextNode.get();
 //    }
-    locate(key).traverse([=](VexNode &vexNode) {
+    locate(key).traverse([&key, this](VexNode &vexNode) {
         removeSingleArc(vexNode._key, key);
     });//Illegal to use lambda to change this element!only use for locate and read
     _nodeMap.erase(key);
