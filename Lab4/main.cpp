@@ -10,11 +10,11 @@ void displayMenu(int index) {
     printf("%-20s%-20s\n", "1. Init", "10. DeleteArc");
     printf("%-20s%-20s\n", "2. Destroy", "11. DFSTraverse");
     printf("%-20s%-20s\n", "3. LocateVex", "12. BFSTraverse");
-    printf("%-20s%-20s\n", "4. AssignVex", "13. PrintMap");
-    printf("%-20s%-20s\n", "5. FirstAdjVex", "");
-    printf("%-20s%-20s\n", "6. NextAdjVex", "15. Save");
-    printf("%-20s%-20s\n", "7. InsertVex ", "16. Load");
-    printf("%-20s%-20s\n", "8. DeleteVex", "20. ChangeIndex");
+    printf("%-20s%-20s\n", "4. AssignVex", "15. Save");
+    printf("%-20s%-20s\n", "5. FirstAdjVex", "16. Load");
+    printf("%-20s%-20s\n", "6. NextAdjVex", "20. ChangeIndex");
+    printf("%-20s%-20s\n", "7. InsertVex ", "");
+    printf("%-20s%-20s\n", "8. DeleteVex", "");
     printf("%-20s%-20s\n", "9. InsertArc", "");
 }
 
@@ -128,20 +128,6 @@ int main() {
                     });
                     break;
                 }
-//                case 13: {
-//                    std::cout << "postOrderTraverse" << std::endl;
-//                    lists[index].postOrderTraverse([](const nodeKey &key, const ElemType &val) {
-//                        std::cout << std::left << std::setw(20) << key << val << std::endl;
-//                    });
-//                    break;
-//                }
-//                case 14: {
-//                    std::cout << "levelOrderTraverse" << std::endl;
-//                    lists[index].levelOrderTraverse([](const nodeKey &key, const ElemType &val) {
-//                        std::cout << std::left << std::setw(20) << key << val << std::endl;
-//                    });
-//                    break;
-//                }
 //                case 15: {
 //                    std::cout << "Save" << std::endl;
 //                    lists[index].save(std::to_string(index));

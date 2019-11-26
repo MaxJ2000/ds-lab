@@ -28,7 +28,7 @@ private:
     nodeKey _key;
 
     std::unique_ptr<VexNode> _nextNode;
-public:
+public://Why???Define inline is ok,but in cpp is multiple???
     VexNode();
 
     explicit VexNode(nodeKey key) : _key(std::move(key)) {}
@@ -107,6 +107,10 @@ public:
     void insertArc(const nodeKey &, const nodeKey &);
 
     void removeArc(const nodeKey &, const nodeKey &);
+
+    void save(std::string &&);
+
+    void load(std::string &&);
 
     void DFSTraverse(std::function<void(GraphNode<T> &)> &&);
 

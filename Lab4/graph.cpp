@@ -2,9 +2,9 @@
 // Created by john on 11/25/19.
 //
 
+#include <fstream>
 #include "graph.h"
 
-VexNode::VexNode() = default;
 
 template<typename T>
 GraphNode<T>::GraphNode() = default;
@@ -149,18 +149,23 @@ void GraphHead<T>::DFSTraverse(std::function<void(GraphNode<T> &)> &&visit) {
             visitStatus[item.second._key] = true;
         }
         while (!visitStack.empty()) {
-//            auto curNode = visitStack.top(); //Why Delete???
             auto curKey = std::move(visitStack.top());
             visitStack.pop();
             visit(locate(curKey));
-            auto ptr = locate(curKey)._nextNode.get();
-            while (ptr != nullptr) {
-                if (!visitStatus[ptr->_key]) {
-                    visitStack.push(ptr->_key);
-                    visitStatus[ptr->_key] = true;
+//            auto ptr = locate(curKey)._nextNode.get();
+//            while (ptr != nullptr) {
+//                if (!visitStatus[ptr->_key]) {
+//                    visitStack.push(ptr->_key);
+//                    visitStatus[ptr->_key] = true;
+//                }
+//                ptr = ptr->_nextNode.get();
+//            }
+            locate(curKey).traverse([&visitStack, &visitStatus](VexNode &vexNode) {
+                if (!visitStatus[vexNode.key()]) {
+                    visitStack.push(vexNode.key());
+                    visitStatus[vexNode.key()] = true;
                 }
-                ptr = ptr->_nextNode.get();
-            }
+            });
         }
     }
 }
@@ -178,14 +183,26 @@ void GraphHead<T>::BFSTraverse(std::function<void(GraphNode<T> &)> &&visit) {
             auto curKey = std::move(visitQueue.front());
             visitQueue.pop();
             visit(locate(curKey));
-            auto ptr = locate(curKey)._nextNode.get();
-            while (ptr != nullptr) {
-                if (!visitStatus[ptr->_key]) {
-                    visitQueue.push(ptr->_key);
-                    visitStatus[ptr->_key] = true;
+//            auto ptr = locate(curKey)._nextNode.get();
+//            while (ptr != nullptr) {
+//                if (!visitStatus[ptr->_key]) {
+//                    visitQueue.push(ptr->_key);
+//                    visitStatus[ptr->_key] = true;
+//                }
+//                ptr = ptr->_nextNode.get();
+//            }
+            locate(curKey).traverse([&visitQueue, &visitStatus](VexNode &vexNode) {
+                if (!visitStatus[vexNode.key()]) {
+                    visitQueue.push(vexNode.key());
+                    visitStatus[vexNode.key()] = true;
                 }
-                ptr = ptr->_nextNode.get();
-            }
+            });
         }
     }
+}
+
+template<typename T>
+void GraphHead<T>::save(std::string &&file) {
+    std::ofstream fs;
+
 }
