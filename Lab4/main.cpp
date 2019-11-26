@@ -19,7 +19,6 @@ void displayMenu(int index) {
 }
 
 int main() {
-    auto a=std::unordered_map<int,bool >();
     auto option = 1;
     auto index = 0;
     GraphHead<ElemType> lists[20];
@@ -110,7 +109,8 @@ int main() {
                 case 11: {
                     std::cout << "DFSTraverse" << std::endl;
                     lists[index].DFSTraverse([](GraphNode<ElemType> &node) {
-                        std::cout << "Key: " << node.key() << " Val: " << node.val() << " Adjacency Key:";
+                        std::cout << "Key:" << std::left << std::setw(10) << node.key()
+                                  << "Val:" << std::left << std::setw(15) << node.val() << " Adjacency Key:";
                         node.traverse([](VexNode &vexNode) {
                             std::cout << vexNode.key() << " ";
                         });
@@ -119,9 +119,10 @@ int main() {
                     break;
                 }
                 case 12: {
-                    std::cout << "DFSTraverse" << std::endl;
+                    std::cout << "BFSTraverse" << std::endl;
                     lists[index].BFSTraverse([](GraphNode<ElemType> &node) {
-                        std::cout << "Key: " << node.key() << " Val: " << node.val() << " Adjacency Key:";
+                        std::cout << "Key:" << std::left << std::setw(10) << node.key()
+                                  << "Val:" << std::left << std::setw(15) << node.val() << " Adjacency Key:";
                         node.traverse([](VexNode &vexNode) {
                             std::cout << vexNode.key() << " ";
                         });
@@ -134,17 +135,17 @@ int main() {
                     lists[index].save(std::to_string(index));
                     break;
                 }
-//                case 16: {
-//                    std::cout << "Load" << std::endl;
-//                    lists[index].clear();
-//                    lists[index].load(std::to_string(index));
-//                    break;
-//                }
-//                case 20 : {
-//                    std::cout << "ChangeIndex" << std::endl;
-//                    std::cin >> index;
-//                    continue;
-//                }
+                case 16: {
+                    std::cout << "Load" << std::endl;
+                    lists[index].clear();
+                    lists[index].load(std::to_string(index));
+                    break;
+                }
+                case 20 : {
+                    std::cout << "ChangeIndex" << std::endl;
+                    std::cin >> index;
+                    continue;
+                }
                 default: {
                     break;
                 }

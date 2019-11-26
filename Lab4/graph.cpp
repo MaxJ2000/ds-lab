@@ -32,7 +32,7 @@ GraphHead<T>::GraphHead(const nodeSet<T> &nodeSet, const arcSet &arcSet) {
         if (_nodeMap.find(arcArray[0] == _nodeMap.end()) || _nodeMap.find(arcArray[1]) == _nodeMap.end()) {
             throw std::runtime_error("Cannot Find" + arcArray[0] + " or" + arcArray[1]);
         }
-        insertArc(arcSet[0], arcSet[1]);
+        insertArc(arcArray[0], arcArray[1]);
     }
 }
 
@@ -72,7 +72,7 @@ void GraphHead<T>::assignVex(const nodeKey &key, T val) {
 
 template<typename T>
 void GraphHead<T>::removeSingleArc(const nodeKey &firKey, const nodeKey &secKey) {
-    GraphNode<T> &node = locate(firKey);
+    auto &node = locate(firKey);
     auto ptr = node._nextNode.get();
     if (ptr == nullptr) {
         return;
@@ -107,9 +107,9 @@ void GraphHead<T>::removeVex(const nodeKey &key) {
 //        removeSingleArc(ptr->_key, key);
 //        ptr = ptr->_nextNode.get();
 //    }
-    locate(key).traverse([this, &key](VexNode &vexNode) {
-        this->removeSingleArc(vexNode._key, key);
-    });
+    locate(key).traverse([=](VexNode &vexNode) {
+        removeSingleArc(vexNode._key, key);
+    });//Illegal to use lambda to change this element!only use for locate and read
     _nodeMap.erase(key);
 }
 
@@ -221,5 +221,30 @@ void GraphHead<T>::save(std::string &&file) {
         visitStatus[item.second.key()] = true;
     }
     fs.close();
+}
+
+template<typename T>
+void GraphHead<T>::load(std::string &&file) {
+    _nodeMap.clear();
+    _nodeCount = 0;
+    std::ifstream fs;
+    nodeKey keyBuf, arcKeyBuf;
+    T valBuf;
+    fs.open(file + "VexSet.sav");
+    while (fs >> keyBuf >> valBuf) {
+        insertVex(GraphNode<T>(keyBuf, valBuf));
+    }
+    fs.close();
+    fs.open(file + "ArcSet.sav");
+    while (getline(fs, keyBuf, ',') && getline(fs, arcKeyBuf)) {
+        insertArc(keyBuf, arcKeyBuf);
+    }
+    fs.close();
+//    for (auto &&arcArray:arcSet) {
+//        if (_nodeMap.find(arcArray[0] == _nodeMap.end()) || _nodeMap.find(arcArray[1]) == _nodeMap.end()) {
+//            throw std::runtime_error("Cannot Find" + arcArray[0] + " or" + arcArray[1]);
+//        }
+//        insertArc(arcSet[0], arcSet[1]);
+//    }
 }
 
