@@ -4,17 +4,7 @@
 
 #include "graph.h"
 
-
-VexNode::VexNode() = default;;
-
-VexNode::VexNode(nodeKey key) : _key(std::move(key)) {};
-
-void VexNode::traverse(std::function<void(VexNode &)> &&visit) {
-    visit(*this);
-    if (_nextNode != nullptr) {
-        _nextNode->traverse(std::move(visit));
-    }
-}
+VexNode::VexNode() = default;
 
 template<typename T>
 GraphNode<T>::GraphNode() = default;
@@ -82,7 +72,7 @@ void GraphHead<T>::assignVex(const nodeKey &key, T val) {
 
 template<typename T>
 void GraphHead<T>::removeSingleArc(const nodeKey &firKey, const nodeKey &secKey) {
-    GraphNode<T> & node = locate(firKey);
+    GraphNode<T> &node = locate(firKey);
     auto ptr = node._nextNode.get();
     if (ptr == nullptr) {
         return;
@@ -152,21 +142,21 @@ const nodeKey &GraphHead<T>::nextAdjVex(const nodeKey &key, const nodeKey &arcKe
 template<typename T>
 void GraphHead<T>::DFSTraverse(std::function<void(GraphNode<T> &)> &&visit) {
     auto visitStatus = std::unordered_map<nodeKey, bool>();
-    auto visitStack = std::stack<GraphNode<T> *>();
+    auto visitStack = std::stack<nodeKey>();
     for (const auto &item : _nodeMap) {
         if (!visitStatus[item.second._key]) {
-            visitStack.push(&item.second);
+            visitStack.push(item.second._key);
             visitStatus[item.second._key] = true;
         }
         while (!visitStack.empty()) {
 //            auto curNode = visitStack.top(); //Why Delete???
-            auto curNode = visitStack.top();
+            auto curKey = std::move(visitStack.top());
             visitStack.pop();
-            visit(*curNode);
-            auto ptr = curNode->_nextNode.get();
+            visit(locate(curKey));
+            auto ptr = locate(curKey)._nextNode.get();
             while (ptr != nullptr) {
                 if (!visitStatus[ptr->_key]) {
-                    visitStack.push(&locate(ptr->_key));
+                    visitStack.push(ptr->_key);
                     visitStatus[ptr->_key] = true;
                 }
                 ptr = ptr->_nextNode.get();
@@ -178,20 +168,20 @@ void GraphHead<T>::DFSTraverse(std::function<void(GraphNode<T> &)> &&visit) {
 template<typename T>
 void GraphHead<T>::BFSTraverse(std::function<void(GraphNode<T> &)> &&visit) {
     auto visitStatus = std::unordered_map<nodeKey, bool>();
-    auto visitQueue = std::queue<GraphNode<T> *>();
+    auto visitQueue = std::queue<nodeKey>();
     for (const auto &item : _nodeMap) {
         if (!visitStatus[item.second._key]) {
-            visitQueue.push(&item.second);
+            visitQueue.push(item.second._key);
             visitStatus[item.second._key] = true;
         }
         while (!visitQueue.empty()) {
-            auto &curNode = visitQueue.front();
+            auto curKey = std::move(visitQueue.front());
             visitQueue.pop();
-            visit(*curNode);
-            auto ptr = curNode->_nextNode.get();
+            visit(locate(curKey));
+            auto ptr = locate(curKey)._nextNode.get();
             while (ptr != nullptr) {
                 if (!visitStatus[ptr->_key]) {
-                    visitQueue.push(&locate(ptr->_key));
+                    visitQueue.push(ptr->_key);
                     visitStatus[ptr->_key] = true;
                 }
                 ptr = ptr->_nextNode.get();

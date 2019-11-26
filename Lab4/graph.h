@@ -15,7 +15,6 @@
 #include <utility>
 #include <queue>
 
-
 using nodeKey=std::string;
 
 template<typename T>
@@ -32,19 +31,22 @@ private:
 public:
     VexNode();
 
-    explicit VexNode(nodeKey);
+    explicit VexNode(nodeKey key) : _key(std::move(key)) {}
 
     inline nodeKey &key() { return _key; };
 
-    void traverse(std::function<void(VexNode &)> &&);
+    void traverse(std::function<void(VexNode &)> &&visit) {
+        visit(*this);
+        if (_nextNode != nullptr) {
+            _nextNode->traverse(std::move(visit));
+        }
+    }
+    template<typename T>
+    friend class GraphNode;
 
     template<typename T>
-    friend
-    class GraphNode;
+    friend class GraphHead;
 
-    template<typename T>
-    friend
-    class GraphHead;
 };
 
 template<typename T>
@@ -77,7 +79,7 @@ using arcSet=std::vector<std::array<nodeKey, 2>>;
 template<typename T>
 class GraphHead {
 private:
-    std::unordered_map<nodeKey, GraphNode<T>&&> _nodeMap;
+    std::unordered_map<nodeKey, GraphNode<T>> _nodeMap;
 
     int _nodeCount;
 
@@ -98,7 +100,7 @@ public:
 
     const nodeKey &nextAdjVex(const nodeKey &, const nodeKey &);
 
-    void insertVex(GraphNode<T>&&);
+    void insertVex(GraphNode<T> &&);
 
     void removeVex(const nodeKey &);
 
