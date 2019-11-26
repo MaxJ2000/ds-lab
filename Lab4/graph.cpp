@@ -18,7 +18,6 @@ void GraphNode<T>::traverse(std::function<void(VexNode &)> &&visit) {
     _nextNode->traverse(std::move(visit));
 }
 
-
 template<typename T>
 GraphHead<T>::GraphHead() = default;
 
@@ -85,13 +84,6 @@ void GraphHead<T>::removeSingleArc(const nodeKey &firKey, const nodeKey &secKey)
             vexNode._nextNode = std::move(vexNode._nextNode->_nextNode);
         }
     });
-//    while (ptr->_nextNode != nullptr) {
-//        if (ptr->_nextNode->_key == secKey) {
-//            ptr->_nextNode = std::move(ptr->_nextNode->_nextNode);
-//            break;
-//        }
-//        ptr = ptr->_nextNode.get();
-//    }
 }
 
 template<typename T>
@@ -102,11 +94,6 @@ void GraphHead<T>::removeArc(const nodeKey &firKey, const nodeKey &secKey) {
 
 template<typename T>
 void GraphHead<T>::removeVex(const nodeKey &key) {
-//    auto ptr = locate(key)._nextNode.get();
-//    while (ptr != nullptr) {
-//        removeSingleArc(ptr->_key, key);
-//        ptr = ptr->_nextNode.get();
-//    }
     locate(key).traverse([&key, this](VexNode &vexNode) {
         removeSingleArc(vexNode._key, key);
     });//Illegal to use lambda to change this element!only use for locate and read
@@ -120,13 +107,6 @@ const nodeKey &GraphHead<T>::firstAdjVex(const nodeKey &key) {
 
 template<typename T>
 const nodeKey &GraphHead<T>::nextAdjVex(const nodeKey &key, const nodeKey &arcKey) {
-//    auto ptr = locate(key)._nextNode.get();
-//    while (ptr != nullptr) {
-//        if (ptr->_key == arcKey) {
-//            return key;
-//        }
-//        ptr = ptr->_nextNode.get();
-//    }
     nodeKey targetKey;
     locate(key).traverse([&targetKey, &arcKey](VexNode &vexNode) {
         if (vexNode._key == arcKey) {
@@ -152,14 +132,6 @@ void GraphHead<T>::DFSTraverse(std::function<void(GraphNode<T> &)> &&visit) {
             auto curKey = std::move(visitStack.top());
             visitStack.pop();
             visit(locate(curKey));
-//            auto ptr = locate(curKey)._nextNode.get();
-//            while (ptr != nullptr) {
-//                if (!visitStatus[ptr->_key]) {
-//                    visitStack.push(ptr->_key);
-//                    visitStatus[ptr->_key] = true;
-//                }
-//                ptr = ptr->_nextNode.get();
-//            }
             locate(curKey).traverse([&visitStack, &visitStatus](VexNode &vexNode) {
                 if (!visitStatus[vexNode.key()]) {
                     visitStack.push(vexNode.key());
@@ -183,14 +155,6 @@ void GraphHead<T>::BFSTraverse(std::function<void(GraphNode<T> &)> &&visit) {
             auto curKey = std::move(visitQueue.front());
             visitQueue.pop();
             visit(locate(curKey));
-//            auto ptr = locate(curKey)._nextNode.get();
-//            while (ptr != nullptr) {
-//                if (!visitStatus[ptr->_key]) {
-//                    visitQueue.push(ptr->_key);
-//                    visitStatus[ptr->_key] = true;
-//                }
-//                ptr = ptr->_nextNode.get();
-//            }
             locate(curKey).traverse([&visitQueue, &visitStatus](VexNode &vexNode) {
                 if (!visitStatus[vexNode.key()]) {
                     visitQueue.push(vexNode.key());
@@ -240,11 +204,5 @@ void GraphHead<T>::load(std::string &&file) {
         insertArc(keyBuf, arcKeyBuf);
     }
     fs.close();
-//    for (auto &&arcArray:arcSet) {
-//        if (_nodeMap.find(arcArray[0] == _nodeMap.end()) || _nodeMap.find(arcArray[1]) == _nodeMap.end()) {
-//            throw std::runtime_error("Cannot Find" + arcArray[0] + " or" + arcArray[1]);
-//        }
-//        insertArc(arcSet[0], arcSet[1]);
-//    }
 }
 
