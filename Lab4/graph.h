@@ -28,10 +28,12 @@ private:
     nodeKey _key;
 
     std::unique_ptr<VexNode> _nextNode;
-public:
-    VexNode() = default;
 
-    explicit VexNode(nodeKey key) : _key(std::move(key)) {};
+public://Why???Define inline is ok,but in cpp is multiple???
+
+    VexNode();
+
+    explicit VexNode(nodeKey key);
 
     inline const nodeKey &key() const { return _key; };
 

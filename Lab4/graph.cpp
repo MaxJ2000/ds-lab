@@ -5,6 +5,18 @@
 #include <fstream>
 #include "graph.h"
 
+VexNode::VexNode() = default;
+
+
+VexNode::VexNode(nodeKey key) : _key(std::move(key)) {}
+
+
+void VexNode::traverse(std::function<void(VexNode &)> &&visit){
+    visit(*this);
+    if (_nextNode != nullptr) {
+        _nextNode->traverse(std::move(visit));
+    }
+}
 
  void VexNode::traverse(std::function<void(VexNode &)> &&visit) {
     visit(*this);
