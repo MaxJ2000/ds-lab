@@ -5,7 +5,6 @@
 #include <fstream>
 #include "graph.h"
 
-
 template<typename T>
 GraphNode<T>::GraphNode() = default;
 

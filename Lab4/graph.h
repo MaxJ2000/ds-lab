@@ -31,7 +31,7 @@ private:
 public://Why???Define inline is ok,but in cpp is multiple???
     VexNode() = default;
 
-    explicit VexNode(nodeKey key) : _key(std::move(key)) {}
+    explicit VexNode(nodeKey key) : _key(std::move(key)) {};
 
     inline const nodeKey &key() const { return _key; };
 
