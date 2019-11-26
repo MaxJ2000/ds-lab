@@ -19,6 +19,7 @@ void displayMenu(int index) {
 }
 
 int main() {
+    auto a=std::unordered_map<int,bool >();
     auto option = 1;
     auto index = 0;
     GraphHead<ElemType> lists[20];
@@ -128,11 +129,11 @@ int main() {
                     });
                     break;
                 }
-//                case 15: {
-//                    std::cout << "Save" << std::endl;
-//                    lists[index].save(std::to_string(index));
-//                    break;
-//                }
+                case 15: {
+                    std::cout << "Save" << std::endl;
+                    lists[index].save(std::to_string(index));
+                    break;
+                }
 //                case 16: {
 //                    std::cout << "Load" << std::endl;
 //                    lists[index].clear();

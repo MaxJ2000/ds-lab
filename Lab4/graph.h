@@ -33,7 +33,7 @@ public://Why???Define inline is ok,but in cpp is multiple???
 
     explicit VexNode(nodeKey key) : _key(std::move(key)) {}
 
-    inline nodeKey &key() { return _key; };
+    inline const nodeKey &key() const { return _key; };
 
     void traverse(std::function<void(VexNode &)> &&visit) {
         visit(*this);
@@ -41,11 +41,14 @@ public://Why???Define inline is ok,but in cpp is multiple???
             _nextNode->traverse(std::move(visit));
         }
     }
-    template<typename T>
-    friend class GraphNode;
 
     template<typename T>
-    friend class GraphHead;
+    friend
+    class GraphNode;
+
+    template<typename T>
+    friend
+    class GraphHead;
 
 };
 
@@ -64,9 +67,9 @@ public:
 
     void traverse(std::function<void(VexNode &)> &&);
 
-    inline T &val() { return _val; };
+    inline const T &val() const { return _val; };
 
-    inline nodeKey &key() { return _key; };
+    inline const nodeKey &key() const { return _key; };
 
     friend class GraphHead<T>;
 };

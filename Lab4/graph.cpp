@@ -56,11 +56,11 @@ void GraphHead<T>::insertVex(GraphNode<T> &&node) {
 template<typename T>
 void GraphHead<T>::insertArc(const nodeKey &firKey, const nodeKey &secKey) {
     auto &firNode = _nodeMap[firKey];
-    auto firPtr = std::make_unique<VexNode>(firKey);
+    auto firPtr = std::make_unique<VexNode>(secKey);
     firPtr->_nextNode = std::move(firNode._nextNode);
     firNode._nextNode = std::move(firPtr);
     auto &secNode = _nodeMap[secKey];
-    auto secPtr = std::make_unique<VexNode>(secKey);
+    auto secPtr = std::make_unique<VexNode>(firKey);
     secPtr->_nextNode = std::move(secNode._nextNode);
     secNode._nextNode = std::move(secPtr);
 }
@@ -203,6 +203,23 @@ void GraphHead<T>::BFSTraverse(std::function<void(GraphNode<T> &)> &&visit) {
 
 template<typename T>
 void GraphHead<T>::save(std::string &&file) {
+    auto visitStatus = std::unordered_map<nodeKey, bool>();
     std::ofstream fs;
-
+    fs.open(file + "VexSet.sav");
+    for (const auto &item : _nodeMap) {
+        fs << item.first << std::endl;
+        fs << item.second.val() << std::endl;
+    }
+    fs.close();
+    fs.open(file + "ArcSet.sav");
+    for (const auto &item : _nodeMap) {
+        locate(item.second.key()).traverse([&item, &fs, &visitStatus](VexNode &vexNode) {
+            if (!visitStatus[vexNode.key()]) {
+                fs << item.second.key() << "," << vexNode.key() << std::endl;
+            }
+        });
+        visitStatus[item.second.key()] = true;
+    }
+    fs.close();
 }
+
