@@ -18,13 +18,6 @@ void VexNode::traverse(std::function<void(VexNode &)> &&visit){
     }
 }
 
- void VexNode::traverse(std::function<void(VexNode &)> &&visit) {
-    visit(*this);
-    if (_nextNode != nullptr) {
-        _nextNode->traverse(std::move(visit));
-    }
-}
-
 template<typename T>
 GraphNode<T>::GraphNode() = default;
 
@@ -115,7 +108,7 @@ template<typename T>
 void GraphHead<T>::removeVex(const nodeKey &key) {
     locate(key).traverse([&key, this](VexNode &vexNode) {
         removeSingleArc(vexNode._key, key);
-    });//Illegal to use lambda to change this element!only use for locate and read
+    });
     _nodeMap.erase(key);
 }
 
