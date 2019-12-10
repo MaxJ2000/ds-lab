@@ -66,7 +66,7 @@ public:
 
     inline const T &val() const { return _val; };
 
-    inline const nodeKey &key() const { return _key; };
+    [[nodiscard]] inline const nodeKey &key() const { return _key; };
 
     friend class GraphHead<T>;
 };
