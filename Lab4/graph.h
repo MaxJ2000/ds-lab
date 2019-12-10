@@ -35,7 +35,7 @@ public://Why???Define inline is ok,but in cpp is multiple???
 
     explicit VexNode(nodeKey key);
 
-    inline const nodeKey &key() const { return _key; };
+    [[nodiscard]] inline const nodeKey &key() const { return _key; };
 
     void traverse(std::function<void(VexNode &)> &&visit);
 
