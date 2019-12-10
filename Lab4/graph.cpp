@@ -106,7 +106,7 @@ template<typename T>
 void GraphHead<T>::removeVex(const nodeKey &key) {
     locate(key).traverse([&key, this](VexNode &vexNode) {
         removeSingleArc(vexNode._key, key);
-    });//Illegal to use lambda to change this element!only use for locate and read
+    });
     _nodeMap.erase(key);
 }
 

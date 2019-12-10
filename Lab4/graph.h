@@ -29,7 +29,7 @@ private:
 
     std::unique_ptr<VexNode> _nextNode;
 
-public://Why???Define inline is ok,but in cpp is multiple???
+public:
 
     VexNode();
 
